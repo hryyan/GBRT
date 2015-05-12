@@ -193,6 +193,14 @@ public:
 class RandomSplitter : public BaseDenseSplitter
 {
 public:
+    /**
+     * @brief Splitter for finding the best random split
+     * @param _criterion
+     * @param _max_features
+     * @param _min_samples_leaf
+     * @param _min_weight_leaf
+     * @param _random_state
+     */
     RandomSplitter(Criterion& criterion,
                    int max_features,
                    int min_samples_leaf,
@@ -214,6 +222,14 @@ public:
 class PresortBestSplitter : public BaseDenseSplitter
 {
 public:
+    /**
+     * @brief Splitter for finding the best split, using presorting
+     * @param _criterion
+     * @param _max_features
+     * @param _min_samples_leaf
+     * @param _min_weight_leaf
+     * @param _random_state
+     */
     PresortBestSplitter(Criterion& _criterion,
                         int _max_features,
                         int _min_samples_leaf,

@@ -1,0 +1,3 @@
+#TEMPLATE = lib
+#CONFIG = dll
+#VERSION = 0.0.1

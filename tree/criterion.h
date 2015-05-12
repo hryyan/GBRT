@@ -108,6 +108,9 @@ public:
 class ClassificationCriterion : public Criterion
 {
 public:
+    /**
+     * @brief Abstract criterion for classification
+     */
     ClassificationCriterion();
     virtual ~ClassificationCriterion();
 
@@ -162,6 +165,20 @@ public:
 class Entropy : public ClassificationCriterion
 {
 public:
+    /**
+     * @brief Entropy::Cross Entropy impurity criteria.
+     *
+     *  Let the target be a classification outcome taking values in 0, 1, ..., K-1.
+     *  If node m represents a region Rm with Nm observations, then let
+     *
+     *       pmk = 1/ Nm \sum_{x_i in Rm} I(yi = k)
+     *
+     *     be the proportion of class k observations in node m.
+     *
+     *     The cross-entropy is then defined as
+     *
+     *       cross-entropy = - \sum_{k=0}^{K-1} pmk log(pmk)
+     */
     Entropy();
     virtual ~Entropy();
 
@@ -180,6 +197,21 @@ public:
 class Gini : public ClassificationCriterion
 {
 public:
+    /**
+     * @brief Gini::Gini Index impurity criteria.
+     *
+     *     Let the target be a classification outcome taking values in 0, 1, ..., K-1.
+     *     If node m represents a region Rm with Nm observations, then let
+     *
+     *         pmk = 1/ Nm \sum_{x_i in Rm} I(yi = k)
+     *
+     *     be the proportion of class k observations in node m.
+     *
+     *     The Gini Index is then defined as:
+     *
+     *         index = \sum_{k=0}^{K-1} pmk (1 - pmk)
+     *               = 1 - \sum_{k=0}^{K-1} pmk ** 2
+     */
     Gini();
     virtual ~Gini();
 
@@ -198,6 +230,14 @@ public:
 class RegressionCriterion : public Criterion
 {
 public:
+    /** Abstract criterion for regression.
+     *
+     * Computes variance of the target values left and right of the split point.
+     * Computation is linear in `n_samples` by using ::
+     *
+     *     var = \sum_i^n (y_i - y_bar) ** 2
+     *         = (\sum_i^n y_i ** 2) - n_samples y_bar ** 2
+     */
     RegressionCriterion();
     virtual ~RegressionCriterion();
 
@@ -262,16 +302,33 @@ public:
 class MSE : public RegressionCriterion
 {
 public:
+    /** Mean squared error impurity criterion.
+     * MSE = var_left + vaar_right
+     */
     MSE();
     virtual ~MSE();
 
+    /**
+     * @brief Evaluate the impurity of the current node, i.e. the impurity of samples[start:end].
+     */
     virtual double node_impurity();
+
+    /**
+     * @brief Evaluate the impurity in children nodes, i.e. the impurity of samples[start:pos] + the impurity of samples[pos:end].
+     * @return pair<impurity_left, impurity_right>
+     */
     virtual std::pair<double, double> children_impurity();
 };
 
 class FriedmanMSE : public MSE
 {
 public:
+    /**
+     * Mean squared error impurity criterion with improvement score by Friedman
+     * Uses the formula (35) in Friedmans original Gradient Boosting paper:
+     *     diff = mean_left - mean_right
+     *     improvement = n_left * n_right * diff^2 / (n_left + n_right)
+     */
     FriedmanMSE();
     virtual ~FriedmanMSE();
 
