@@ -3,6 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 #include "basetree.h"
+#include "util.h"
 
 using cv::Mat;
 using cv::Mat_;

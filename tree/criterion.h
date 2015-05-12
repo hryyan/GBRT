@@ -5,6 +5,11 @@
 //Criterion
 //author: vincent yan, 2015-04-27
 //========================================
+#define DEBUG
+#ifdef DEBUG
+#include <iostream>
+using namespace std;
+#endif
 
 #include <cmath>
 #include <utility>
@@ -14,6 +19,7 @@
 #include <opencv2/opencv.hpp>
 using std::pair;
 using std::vector;
+using cv::Mat;
 using cv::Mat_;
 
 class Criterion
@@ -31,8 +37,8 @@ public:
      * @param start:
      * @param end:
      */
-    virtual void init(Mat_<double> y,
-                      Mat_<double> sample_weight,
+    virtual void init(Mat y,
+                      Mat sample_weight,
                       double weight_n_samples,
                       vector<int>& samples,
                       int start,
@@ -114,8 +120,8 @@ public:
      * @param start:
      * @param end:
      */
-    virtual void init(Mat_<double> y,
-                      Mat_<double> sample_weight,
+    virtual void init(Mat y,
+                      Mat sample_weight,
                       double weight_n_samples,
                       vector<int>& samples,
                       int start,
@@ -204,12 +210,12 @@ public:
      * @param start:
      * @param end:
      */
-    virtual void init(Mat_<double> y,
-                 Mat_<double> sample_weight,
-                 double weight_n_samples,
-                 vector<int>& samples,
-                 int start,
-                 int end);
+    virtual void init(Mat y,
+                      Mat sample_weight,
+                      double weight_n_samples,
+                      vector<int>& samples,
+                      int start,
+                      int end);
 
     /**
      * @brief Reset the criterion at pos=start

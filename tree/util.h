@@ -10,15 +10,6 @@ using cv::Mat;
 using cv::Mat_;
 
 /**
- * @brief Estimate class weights for unbalanced datasets
- * @param class_weight dict or None, if None is given, the class weights will be uniform.
- * @param y Array of original class labels per sample.
- * @return Mat, shape = [n_classes, 1]
- */
-Mat_<double> compute_class_weight(Mat_<double> class_weight,
-                                  Mat_<double> y);
-
-/**
  * @brief Estimate sample weights by class for unbalanced datasets.
  * @param class_weight The weight of classes from 0 to n, shape = [n_classes, 1]
  * @param y The class information of every sample, shape = [n_samples, 1]

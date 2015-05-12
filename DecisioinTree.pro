@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 #SUBDIRS += tree ensemble test_tree test_ensemble
-SUBDIRS += tree
+#SUBDIRS += tree
 SUBDIRS += test_tree
 #test_tree.depends = tree
 #ensemble.depends = tree
