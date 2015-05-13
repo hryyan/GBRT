@@ -25,4 +25,26 @@ Mat_<double> compute_sample_weight(Mat_<double> class_weight,
  */
 vector<double> unique(const Mat& input, bool sort=false);
 
+template <typename T, typename Compare>
+std::vector<int> sort_permutation(
+    std::vector<T> const& vec,
+    Compare compare)
+{
+    std::vector<int> p(vec.size());
+    std::iota(p.begin(), p.end(), 0);
+    std::sort(p.begin(), p.end(),
+        [&](int i, int j){ return compare(vec[i], vec[j]); });
+    return p;
+}
+
+template <typename T>
+std::vector<T> apply_permutation(
+    std::vector<T> const& vec,
+    std::vector<int> const& p)
+{
+    std::vector<T> sorted_vec(p.size());
+    std::transform(p.begin(), p.end(), sorted_vec.begin(),
+        [&](int i){ return vec[i]; });
+    return sorted_vec;
+}
 #endif // UTIL_H

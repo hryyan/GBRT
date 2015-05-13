@@ -9,7 +9,7 @@ Mat_<double> compute_sample_weight(Mat_<double> class_weight,
     Mat_<double> weight = Mat::ones(y.rows, 1, CV_32F);
     if (class_weight.total() != 0)
     {
-        for (int i = 0; i < y.rows(); i++)
+        for (int i = 0; i < y.rows; i++)
         {
             int index = static_cast<int>(y.at<double>(i, 0));
             weight.at<double>(i, 0) = class_weight.at<double>(index, 0);

@@ -6,11 +6,12 @@
 #include <cstdlib>
 #include <opencv2/opencv.hpp>
 #include "criterion.h"
+#include "util.h"
 
 using std::vector;
 using cv::Mat_;
 
-const double FEATURE_THRESHOLD = 1e-1;
+const double FEATURE_THRESHOLD = 1e-7;
 
 /**
  * @brief Data to track sample split
@@ -69,7 +70,7 @@ struct SplitRecord
 class Splitter
 {
 public:
-    Splitter(Criterion& criterion,
+    Splitter(Criterion* criterion,
              int max_feature,
              int min_samples_leaf,
              double min_weight_leaf,
@@ -83,8 +84,8 @@ public:
      * @param sample_weight
      */
     virtual int init(Mat_<double> X,
-                      Mat_<double> y,
-                      Mat_<double> sample_weight);
+                     Mat_<double> y,
+                     Mat_<double> sample_weight);
 
     /**
      * @brief Reset splitter on node samples[start:end].
@@ -110,7 +111,7 @@ public:
      * @return node_value
      */
     vector<double> node_value(){
-        return criterion.node_value();
+        return criterion->node_value();
     }
 
     /**
@@ -118,11 +119,11 @@ public:
      * @return impurity
      */
     double node_impurity(){
-        return criterion.node_impurity();
+        return criterion->node_impurity();
     }
 
 public:
-    Criterion& criterion;                // impurity Criterion
+    Criterion* criterion;                // impurity Criterion
     int max_features;                   // Number of features to test
     int min_samples_leaf;               // Min samples in a leaf
     double min_weight_leaf;             // Minimum weight in a leaf
@@ -166,7 +167,7 @@ public:
 class BaseDenseSplitter : public Splitter
 {
 public:
-    BaseDenseSplitter(Criterion& criterion,
+    BaseDenseSplitter(Criterion* criterion,
                       int max_features,
                       int min_samples_leaf,
                       double min_weight_leaf,
@@ -180,8 +181,8 @@ public:
      * @param sample_weight
      */
     virtual int init(Mat_<double> X,
-                      Mat_<double> y,
-                      Mat_<double> sample_weight);
+                     Mat_<double> y,
+                     Mat_<double> sample_weight);
 
     /**
      * @brief Find a split on onde samples[start:end].
@@ -200,7 +201,7 @@ public:
 class BestSplitter : public BaseDenseSplitter
 {
 public:
-    BestSplitter(Criterion& criterion,
+    BestSplitter(Criterion* criterion,
                  int max_features,
                  int min_samples_leaf,
                  double min_weight_leaf,
@@ -229,7 +230,7 @@ public:
      * @param _min_weight_leaf
      * @param _random_state
      */
-    RandomSplitter(Criterion& criterion,
+    RandomSplitter(Criterion* criterion,
                    int max_features,
                    int min_samples_leaf,
                    double min_weight_leaf,
@@ -258,7 +259,7 @@ public:
      * @param _min_weight_leaf
      * @param _random_state
      */
-    PresortBestSplitter(Criterion& _criterion,
+    PresortBestSplitter(Criterion* _criterion,
                         int _max_features,
                         int _min_samples_leaf,
                         double _min_weight_leaf,

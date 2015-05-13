@@ -11,7 +11,7 @@ void SplitRecord::init_split(int start_pos)
     improvement = -INFINITY;
 }
 
-Splitter::Splitter(Criterion& _criterion,
+Splitter::Splitter(Criterion* _criterion,
                    int _max_feature,
                    int _min_samples_leaf,
                    double _min_weight_leaf,
@@ -95,18 +95,18 @@ double Splitter::node_reset(int _start, int _end)
     start = _start;
     end = _end;
 
-    criterion.init(y,
+    criterion->init(y,
                    sample_weight,
                    weighted_n_samples,
                    samples,
                    start,
                    end);
 
-    weighted_n_samples = criterion.weighted_n_node_samples;
+    weighted_n_samples = criterion->weighted_n_node_samples;
     return weighted_n_samples;
 }
 
-BaseDenseSplitter::BaseDenseSplitter(Criterion& criterion,
+BaseDenseSplitter::BaseDenseSplitter(Criterion* criterion,
                                      int max_feature,
                                      int min_samples_leaf,
                                      double min_weight_leaf,
@@ -132,7 +132,7 @@ int BaseDenseSplitter::init(Mat_<double> _X,
     Splitter::init(_X, _y, _sample_weight);
 }
 
-BestSplitter::BestSplitter(Criterion& criterion,
+BestSplitter::BestSplitter(Criterion* criterion,
                            int max_features,
                            int min_samples_leaf,
                            double min_weight_leaf,
@@ -157,7 +157,6 @@ void BestSplitter::node_split(double impurity,
 {
     split->init_split(end);
 
-    feature_values.clear();
     std::pair<double, double> pdd;
 
     SplitRecord best, current;
@@ -238,11 +237,15 @@ void BestSplitter::node_split(double impurity,
               */
             for (int i = start; i < end; i++)
             {
-               feature_values.push_back(X.at<double>(samples[i], current.feature));
+                feature_values.at(i) = X.at<double>(samples[i], current.feature);
             }
 
             // sort feature_values and apply the squence to samples
             // std::sort(feature_values.begin(), feature_values.end());
+            auto sequence = sort_permutation(feature_values,
+                                [](double const& a, double const &b){return a<b;});
+            feature_values = apply_permutation(feature_values, sequence);
+            samples = apply_permutation(samples, sequence);
 
             if (feature_values.back() <= feature_values.front() + FEATURE_THRESHOLD)
             {
@@ -263,7 +266,7 @@ void BestSplitter::node_split(double impurity,
                 features[f_j] = tmp;
 
                 // Evaluate all splits
-                criterion.reset();
+                criterion->reset();
                 p = start;
 
                 while (p < end)
@@ -283,18 +286,19 @@ void BestSplitter::node_split(double impurity,
                              ((end - current.pos) < min_samples_leaf))
                             continue;
 
-                        criterion.update(current.pos);
+                        criterion->update(current.pos);
 
                         // Reject if min_weight_leaf is not satisfied
-                        if ((criterion.weighted_n_left < min_weight_leaf) ||
-                                criterion.weighted_n_right < min_weight_leaf)
+                        if ((criterion->weighted_n_left < min_weight_leaf) ||
+                                criterion->weighted_n_right < min_weight_leaf)
                             continue;
 
-                        current.improvement = criterion.impurity_improvement(impurity);
+                        double a = feature_values.at(p);
+                        current.improvement = criterion->impurity_improvement(impurity);
 
                         if (current.improvement > best.improvement)
                         {
-                            pdd = criterion.children_impurity();
+                            pdd = criterion->children_impurity();
                             current.impurity_left = pdd.first;
                             current.impurity_right = pdd.second;
                             current.threshold = (feature_values.at(p-1) + feature_values.at(p)) / 2.0;
@@ -346,7 +350,7 @@ void BestSplitter::node_split(double impurity,
     n_constant_features[0] = n_total_constants;
 }
 
-RandomSplitter::RandomSplitter(Criterion& _criterion,
+RandomSplitter::RandomSplitter(Criterion* _criterion,
                                int _max_features,
                                int _min_samples_leaf,
                                double _min_weight_leaf,
@@ -515,19 +519,19 @@ void RandomSplitter::node_split(double impurity,
                     continue;
 
                 // Evaluate split
-                criterion.reset();
-                criterion.update(current.pos);
+                criterion->reset();
+                criterion->update(current.pos);
 
                 // Reject if min_weight_leaf is not satisfied
-                if ((criterion.weighted_n_left < min_weight_leaf) ||
-                        criterion.weighted_n_right < min_weight_leaf)
+                if ((criterion->weighted_n_left < min_weight_leaf) ||
+                        criterion->weighted_n_right < min_weight_leaf)
                     continue;
 
-                current.improvement = criterion.impurity_improvement(impurity);
+                current.improvement = criterion->impurity_improvement(impurity);
 
                 if (current.improvement > best.improvement)
                 {
-                    pdd = criterion.children_impurity();
+                    pdd = criterion->children_impurity();
                     current.impurity_left = pdd.first;
                     current.impurity_right = pdd.second;
                     best = current;
@@ -572,7 +576,7 @@ void RandomSplitter::node_split(double impurity,
     n_constant_features[0] = n_total_constants;
 }
 
-PresortBestSplitter::PresortBestSplitter(Criterion& _criterion,
+PresortBestSplitter::PresortBestSplitter(Criterion* _criterion,
                                          int _max_features,
                                          int _min_samples_leaf,
                                          double _min_weight_leaf,
@@ -725,7 +729,7 @@ void PresortBestSplitter::node_split(double impurity,
                 features[f_i] = features[f_j];
                 features[f_j] = tmp;
 
-                criterion.reset();
+                criterion->reset();
 
                 while (p < end)
                 {
@@ -744,18 +748,18 @@ void PresortBestSplitter::node_split(double impurity,
                              ((end - current.pos) < min_samples_leaf))
                             continue;
 
-                        criterion.update(current.pos);
+                        criterion->update(current.pos);
 
                         // Reject if min_weight_leaf is not satisfied
-                        if ((criterion.weighted_n_left < min_weight_leaf) ||
-                                (criterion.weighted_n_right < min_weight_leaf))
+                        if ((criterion->weighted_n_left < min_weight_leaf) ||
+                                (criterion->weighted_n_right < min_weight_leaf))
                             continue;
 
-                        current.improvement = criterion.impurity_improvement(impurity);
+                        current.improvement = criterion->impurity_improvement(impurity);
 
                         if (current.improvement > best.improvement)
                         {
-                            pdd = criterion.children_impurity();
+                            pdd = criterion->children_impurity();
                             current.impurity_left = pdd.first;
                             current.impurity_right = pdd.second;
                             current.threshold = (feature_values.at(p-1) + feature_values.at(p)) / 2.0;

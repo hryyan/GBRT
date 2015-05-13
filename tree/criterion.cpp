@@ -227,8 +227,6 @@ std::pair<double, double> Gini::children_impurity()
 {
     double gini_left = 0.0;
     double gini_right = 0.0;
-    double total_left = 0.0;
-    double total_right = 0.0;
     double tmp = 0.0;
 
     for (int i = 0; i < n_classes; i++)
@@ -242,10 +240,8 @@ std::pair<double, double> Gini::children_impurity()
                                    weighted_n_left);
     gini_right = 1.0 - gini_right / (weighted_n_right *
                                      weighted_n_right);
-    total_left += gini_left;
-    total_right += gini_right;
 
-    return std::make_pair(total_left, total_right);
+    return std::make_pair(gini_left, gini_right);
 }
 
 RegressionCriterion::RegressionCriterion()
