@@ -35,37 +35,59 @@ Splitter::~Splitter()
 
 }
 
-void Splitter::init(Mat_<double> _X,
+int Splitter::init(Mat_<double> _X,
                     Mat_<double> _y,
                     Mat_<double> _sample_weight)
 {
+    // Init some value
     n_samples = _X.rows;
+    n_features = _X.cols;
+
     weighted_n_samples = 0.0;
 
+    // Validation
+    // _X.rows == _y.rows == _y.total
+    // _y.rows == _samples_weight.rows == _samples_weight.total
+    if (_X.rows != _y.rows)
+        return 1;
+    if (_y.rows != _y.total())
+        return 2;
+    if (_y.rows != _sample_weight.rows)
+        return 3;
+    if (_sample_weight.rows != _sample_weight.total())
+        return 4;
+
+    // Calculate the weight sum
+    int j = 0;
     for (int i = 0; i < n_samples; i++)
     {
-        if (_sample_weight.total() == 0 || _sample_weight.at<double>(i, 0) != 0.0)
+        if (_sample_weight.total() != 0 || _sample_weight.at<double>(i) != 0.0)
         {
             samples.push_back(i);
-            n_samples += 1;
+            j += 1;
         }
 
         if (_sample_weight.total() != 0)
-            weighted_n_samples += _sample_weight.at<double>(i, 0);
+            weighted_n_samples += _sample_weight.at<double>(i);
         else
             weighted_n_samples += 1.0;
     }
+    n_samples = j;
 
-    n_features = _X.cols;
-
+    // Store all feature index
     for (int i = 0; i < n_features; i++)
         features.push_back(i);
 
-    feature_values.resize(n_features);
+    // Store the constant feature index
     constant_features.resize(n_features);
 
+    // Init the size of feature_values
+    feature_values.resize(n_samples);
+
+    // Store the data
+    X = _X;
     y = _y;
-    _sample_weight = sample_weight;
+    sample_weight = _sample_weight;
 }
 
 double Splitter::node_reset(int _start, int _end)
@@ -103,12 +125,11 @@ BaseDenseSplitter::~BaseDenseSplitter()
 
 }
 
-void BaseDenseSplitter::init(Mat_<double> _X,
+int BaseDenseSplitter::init(Mat_<double> _X,
                              Mat_<double> _y,
                              Mat_<double> _sample_weight)
 {
     Splitter::init(_X, _y, _sample_weight);
-    X = _X;
 }
 
 BestSplitter::BestSplitter(Criterion& criterion,
@@ -219,7 +240,9 @@ void BestSplitter::node_split(double impurity,
             {
                feature_values.push_back(X.at<double>(samples[i], current.feature));
             }
-            std::sort(feature_values.begin(), feature_values.end());
+
+            // sort feature_values and apply the squence to samples
+            // std::sort(feature_values.begin(), feature_values.end());
 
             if (feature_values.back() <= feature_values.front() + FEATURE_THRESHOLD)
             {
@@ -568,7 +591,7 @@ PresortBestSplitter::~PresortBestSplitter()
 
 }
 
-void PresortBestSplitter::init(Mat_<double> _X,
+int PresortBestSplitter::init(Mat_<double> _X,
                                Mat_<double> _y,
                                Mat_<double> _sample_weight)
 {

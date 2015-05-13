@@ -27,6 +27,37 @@ struct SplitRecord
     double impurity_right;  // Impurity of the right split.
 
     void init_split(int start_pos);
+
+    SplitRecord()
+        : feature(0),
+          pos(0),
+          threshold(0.),
+          improvement(0.),
+          impurity_left(0.),
+          impurity_right(0.)
+    {
+
+    }
+
+    SplitRecord(const SplitRecord& r)
+    {
+        feature = r.feature;
+        pos = r.pos;
+        threshold = r.threshold;
+        improvement = r.improvement;
+        impurity_left = impurity_left;
+        impurity_right = impurity_right;
+    }
+
+//    void clone(SplitRecord* split)
+//    {
+//        split->feature = feature;
+//        split->pos = pos;
+//        split->threshold = threshold;
+//        split->improvement = improvement;
+//        split->impurity_left = impurity_left;
+//        split->impurity_right = impurity_right;
+//    }
 };
 
 /**
@@ -51,7 +82,7 @@ public:
      * @param y
      * @param sample_weight
      */
-    virtual void init(Mat_<double> X,
+    virtual int init(Mat_<double> X,
                       Mat_<double> y,
                       Mat_<double> sample_weight);
 
@@ -148,7 +179,7 @@ public:
      * @param y
      * @param sample_weight
      */
-    virtual void init(Mat_<double> X,
+    virtual int init(Mat_<double> X,
                       Mat_<double> y,
                       Mat_<double> sample_weight);
 
@@ -161,9 +192,6 @@ public:
 //    virtual void node_split(double impurity,
 //                       SplitRecord *split,
 //                       int* n_constant_features);
-
-public:
-    Mat_<double> X;
 };
 
 /**
@@ -237,7 +265,7 @@ public:
                         int _random_state);
     virtual ~PresortBestSplitter();
 
-    virtual void init(Mat_<double> X,
+    virtual int init(Mat_<double> X,
                       Mat_<double> y,
                       Mat_<double> sample_weight);
 
