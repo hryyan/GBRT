@@ -1,20 +1,17 @@
 #include "basetree.h"
 #include <algorithm>
+#include "criterion.h"
+#include "splitter.h"
 
-/**
- * @brief Tree::
- */
-Tree::Tree(int _n_features,
-           int _n_classes)
+Tree::Tree(int n_features,
+           int n_classes)
+    : _n_features(n_features),  // Input/Output layout
+      _n_classes(n_classes),    // Inner structures
+      _max_depth(0),
+      _node_count(0),
+      _capacity(0)
 {
-    // Input/Output layout
-    n_features = _n_features;
-    n_classes = _n_classes;
 
-    // Inner structures
-    max_depth = 0;
-    node_count = 0;
-    capacity = 0;
 }
 
 Tree::~Tree()
@@ -31,7 +28,10 @@ int Tree::_add_node(int parent,
                     int n_node_samples,
                     double weighted_n_node_samples)
 {
-    int node_id = node_count;
+    int node_id = _node_count;
+
+    // Insure _nodes has enough elements
+    _nodes.push_back(Node());
 
     Node* node = &nodes.at(node_id);
     node->impurity = impurity;
@@ -64,28 +64,28 @@ int Tree::_add_node(int parent,
         node->threshold = threshold;
     }
 
-    node_count += 1;
+    _node_count += 1;
     return node_id;
 }
 
-Mat_<double> Tree::predict(Mat_<double> _X)
+Mat Tree::predict(Mat _X)
 {
     Mat out = _apply_dense(_X);
     Mat_<double> result(_X.rows, 1);
     for (int i = 0; i < out.total(); i++)
-        result.at<double>(i, 0) = value.at(out.at<int>(i, 0));
+        result.at<double>(i, 0) = _value.at(out.at<int>(i, 0));
     return result;
 }
 
-Mat_<double> Tree::_apply_dense(Mat_<double> _X)
+Mat Tree::_apply_dense(Mat _X)
 {
     Node* node;
     int n_samples = _X.rows;
-    Mat result = Mat(n_samples, 1, CV_32F);
+    Mat_<double> result(n_samples, 1);
 
     for (int i = 0; i < n_samples; i++)
     {
-        node = &nodes.at(0);
+        node = &(_nodes.at(0));
 
         // While node is not a leaf
         while (node->left_child != TREE_LEAF)
@@ -93,22 +93,22 @@ Mat_<double> Tree::_apply_dense(Mat_<double> _X)
             // and node.right_child != TreeType::TREE_LEAF
             if (_X.at<double>(i, node->feature) <= node->threshold)
             {
-                node = &(nodes.at(node->left_child));
+                node = &(_nodes.at(node->left_child));
             }
             else
             {
-                node = &(nodes.at(node->right_child));
+                node = &(_nodes.at(node->right_child));
             }
         }
-        std::vector<Node>::iterator it = std::find(nodes.begin(), nodes.end(), *node);
-        result.at<double>(i, 0) = (int)(it - nodes.begin());
+        vector<Node>::iterator it = std::find(_nodes.begin(), _nodes.end(), *node);
+        result.at<double>(i, 0) = (int)(it - _nodes.begin());
     }
     return result;
 }
 
 Mat_<double> Tree::compute_feature_importances(bool normalize)
 {
-    Mat result = Mat::zeros(n_features, 1, CV_32F);
+    Mat result = Mat::zeros(n_features, 1, CV_64F);
     Node left, right;
 
     for (vector<Node>::iterator it = nodes.begin(); it != nodes.end(); it++)
