@@ -11,7 +11,7 @@ BaseDecisionTree::BaseDecisionTree(Criterion* criterion,
                                    int max_features,
                                    int max_leaf_nodes,
                                    int random_state,
-                                   Mat_<double> class_weight,
+                                   Mat class_weight,
                                    int is_classification)
 // Need constructor paras for Tree
     : _criterion(criterion),
@@ -37,9 +37,9 @@ BaseDecisionTree::~BaseDecisionTree()
 
 }
 
-int BaseDecisionTree::fit(Mat_<double> _X,
-                          Mat_<double> _y,
-                          Mat_<double> sample_weight)
+int BaseDecisionTree::fit(Mat _X,
+                          Mat _y,
+                          Mat sample_weight)
 {
     // Validation
     if (_X.rows == 0 || _X.cols == 0)
@@ -106,12 +106,12 @@ int BaseDecisionTree::fit(Mat_<double> _X,
 
 }
 
-Mat_<double> BaseDecisionTree::predict(Mat_<double> _X)
+Mat BaseDecisionTree::predict(Mat _X)
 {
 
 }
 
-Mat_<double> BaseDecisionTree::feature_importances()
+Mat BaseDecisionTree::feature_importances()
 {
 
 }
@@ -125,7 +125,7 @@ DecisionTreeClassifier::DecisionTreeClassifier(Criterion* criterion,
                                                int max_features,
                                                int max_leaf_nodes,
                                                int random_state,
-                                               Mat_<double> class_weight)
+                                               Mat class_weight)
     : BaseDecisionTree(criterion,
                        splitter,
                        max_depth,
@@ -155,7 +155,7 @@ DecisionTreeRegressor::DecisionTreeRegressor(Criterion* criterion,
                                              int max_features,
                                              int max_leaf_nodes,
                                              int random_state,
-                                             Mat_<double> class_weight)
+                                             Mat class_weight)
     : BaseDecisionTree(criterion,
                        splitter,
                        max_depth,

@@ -37,7 +37,7 @@ public:
                      int max_features,
                      int max_leaf_nodes,
                      int random_state,
-                     Mat_<double> class_weight,
+                     Mat class_weight,
                      int is_classification);
     ~BaseDecisionTree();
 
@@ -48,9 +48,9 @@ public:
      * @param sample_weight Sample weights. If total size equals to zero, then samples are equally weighted.
      * @return error_code
      */
-    int fit(Mat_<double> _X,
-             Mat_<double> _y,
-             Mat_<double> sample_weight);
+    int fit(Mat _X,
+            Mat _y,
+            Mat sample_weight);
 
     /**
      * @brief Predict class or regression value of X.
@@ -59,7 +59,7 @@ public:
      * @param _X The input samples, shape = [n_samples]
      * @return The predicted classes, or the predict values
      */
-    Mat_<double> predict(Mat_<double> _X);
+    Mat predict(Mat _X);
 
    /**
     * @brief Return the feature importances.
@@ -67,7 +67,7 @@ public:
     * reduction of the criterion brought by the feature
     * @return Mat, shape = [n_features]
     */
-    Mat_<double> feature_importances();
+    Mat feature_importances();
 
 public:
     Criterion* _criterion;
@@ -79,7 +79,7 @@ public:
     int _max_features;
     int _random_state;
     int _max_leaf_nodes;
-    Mat_<double> _class_weight;
+    Mat _class_weight;
 
     int _n_samples;
     int _n_features;
@@ -114,7 +114,7 @@ public:
                            int max_features,
                            int max_leaf_nodes,
                            int random_state,
-                           Mat_<double> class_weight);
+                           Mat class_weight);
     virtual ~DecisionTreeClassifier();
 
     /**
@@ -123,14 +123,14 @@ public:
      * @param _X The input samples, shape = [n_samples]
      * @return
      */
-    Mat_<double> predict_proba(Mat_<double> _X);
+    Mat predict_proba(Mat _X);
 
     /**
      * @brief Predict class log-probabilities of the input samples X.
      * @param _X The input samples, shape = [n_samples]
      * @return
      */
-    Mat_<double> predict_log_proba(Mat_<double> _X);
+    Mat predict_log_proba(Mat _X);
 };
 
 class DecisionTreeRegressor : public BaseDecisionTree
@@ -158,7 +158,7 @@ public:
                           int max_features,
                           int max_leaf_nodes,
                           int random_state,
-                          Mat_<double> class_weight);
+                          Mat class_weight);
     virtual ~DecisionTreeRegressor();
 };
 
