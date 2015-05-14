@@ -94,15 +94,16 @@ int MSE_test()
     int start = 0;
     int end = 10;
 
-    MSE g = MSE();
-    g.init(y, sample_weight, _weight_n_samples, vec, start, end);
+    Criterion* g = new MSE();
+//    MSE g = MSE();
+    g->init(y, sample_weight, _weight_n_samples, vec, start, end);
 
     for (int i = 0; i < 11; i++)
     {
-        g.update(i);
-        double impurity = g.node_impurity();
-        double d = g.impurity_improvement(impurity);
-        pair<double, double> p = g.children_impurity();
+        g->update(i);
+        double impurity = g->node_impurity();
+        double d = g->impurity_improvement(impurity);
+        pair<double, double> p = g->children_impurity();
         cout << "impurity_improvement: " << d << "\t";
         cout << "left_impurity: " << p.first << "\t" \
              << "right_impurity: " << p.second << endl;

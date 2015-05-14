@@ -317,8 +317,8 @@ void RegressionCriterion::reset()
     sum_right = sum_total;
     sum_left = 0.0;
 
-    weighted_n_left = 0;
     weighted_n_right = weighted_n_node_samples;
+    weighted_n_left = 0;
 }
 
 void RegressionCriterion::update(int new_pos)

@@ -28,8 +28,8 @@ public:
      * @param class_weight
      * @param is_classification 0 for classification, 1 for regression
      */
-    BaseDecisionTree(Criterion& criterion,
-                     Splitter& splitter,
+    BaseDecisionTree(Criterion* criterion,
+                     Splitter* splitter,
                      int max_depth,
                      int min_samples_split,
                      int min_samples_leaf,
@@ -70,8 +70,8 @@ public:
     Mat_<double> feature_importances();
 
 public:
-    Criterion& _criterion;
-    Splitter& _splitter;
+    Criterion* _criterion;
+    Splitter* _splitter;
     int _max_depth;
     int _min_samples_split;
     int _min_samples_leaf;
@@ -105,8 +105,8 @@ public:
      * @param random_state
      * @param class_weight
      */
-    DecisionTreeClassifier(Criterion& criterion,
-                           Splitter& splitter,
+    DecisionTreeClassifier(Criterion* criterion,
+                           Splitter* splitter,
                            int max_depth,
                            int min_samples_split,
                            int min_samples_leaf,
@@ -149,8 +149,8 @@ public:
      * @param random_state
      * @param class_weight
      */
-    DecisionTreeRegressor(Criterion& criterion,
-                          Splitter& splitter,
+    DecisionTreeRegressor(Criterion* criterion,
+                          Splitter* splitter,
                           int max_depth,
                           int min_samples_split,
                           int min_samples_leaf,

@@ -96,11 +96,11 @@ double Splitter::node_reset(int _start, int _end)
     end = _end;
 
     criterion->init(y,
-                   sample_weight,
-                   weighted_n_samples,
-                   samples,
-                   start,
-                   end);
+                    sample_weight,
+                    weighted_n_samples,
+                    samples,
+                    start,
+                    end);
 
     weighted_n_samples = criterion->weighted_n_node_samples;
     return weighted_n_samples;
@@ -246,6 +246,7 @@ void BestSplitter::node_split(double impurity,
                                 [](double const& a, double const &b){return a<b;});
             feature_values = apply_permutation(feature_values, sequence);
             samples = apply_permutation(samples, sequence);
+            criterion->samples = samples;
 
             if (feature_values.back() <= feature_values.front() + FEATURE_THRESHOLD)
             {
@@ -293,7 +294,7 @@ void BestSplitter::node_split(double impurity,
                                 criterion->weighted_n_right < min_weight_leaf)
                             continue;
 
-                        double a = feature_values.at(p);
+                        double a = impurity;
                         current.improvement = criterion->impurity_improvement(impurity);
 
                         if (current.improvement > best.improvement)

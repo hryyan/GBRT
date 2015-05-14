@@ -2,8 +2,8 @@
 #include "criterion.h"
 #include "splitter.h"
 
-BaseDecisionTree::BaseDecisionTree(Criterion &criterion,
-                                   Splitter &splitter,
+BaseDecisionTree::BaseDecisionTree(Criterion* criterion,
+                                   Splitter* splitter,
                                    int max_depth,
                                    int min_samples_split,
                                    int min_samples_leaf,
@@ -116,8 +116,8 @@ Mat_<double> BaseDecisionTree::feature_importances()
 
 }
 
-DecisionTreeClassifier::DecisionTreeClassifier(Criterion &criterion,
-                                               Splitter &splitter,
+DecisionTreeClassifier::DecisionTreeClassifier(Criterion* criterion,
+                                               Splitter* splitter,
                                                int max_depth,
                                                int min_samples_split,
                                                int min_samples_leaf,
@@ -146,8 +146,8 @@ DecisionTreeClassifier::~DecisionTreeClassifier()
 
 }
 
-DecisionTreeRegressor::DecisionTreeRegressor(Criterion &criterion,
-                                             Splitter &splitter,
+DecisionTreeRegressor::DecisionTreeRegressor(Criterion* criterion,
+                                             Splitter* splitter,
                                              int max_depth,
                                              int min_samples_split,
                                              int min_samples_leaf,
