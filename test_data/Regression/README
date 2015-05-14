@@ -1,0 +1,6 @@
+test1-4: make_regression(200, 20, 20)
+
+test1: 5, 0.1826
+test2: 11, 0.4713
+test3: 5, -0.8302
+test4: 2, -0.1717

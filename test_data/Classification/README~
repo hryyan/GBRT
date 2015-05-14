@@ -1,0 +1,1 @@
+test: make_classification(200, 20, 20, 0)
