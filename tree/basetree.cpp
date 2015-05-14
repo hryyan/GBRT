@@ -33,7 +33,7 @@ int Tree::_add_node(int parent,
     // Insure _nodes has enough elements
     _nodes.push_back(Node());
 
-    Node* node = &nodes.at(node_id);
+    Node* node = &(_nodes.at(node_id));
     node->impurity = impurity;
     node->n_node_samples = n_node_samples;
     node->weighted_n_node_samples = weighted_n_node_samples;
@@ -42,11 +42,11 @@ int Tree::_add_node(int parent,
     {
         if (is_left)
         {
-            nodes.at(parent).left_child = node_id;
+            _nodes.at(parent).left_child = node_id;
         }
         else
         {
-            nodes.at(parent).right_child = node_id;
+            _nodes.at(parent).right_child = node_id;
         }
     }
 
@@ -106,17 +106,17 @@ Mat Tree::_apply_dense(Mat _X)
     return result;
 }
 
-Mat_<double> Tree::compute_feature_importances(bool normalize)
+Mat Tree::compute_feature_importances(bool normalize)
 {
-    Mat result = Mat::zeros(n_features, 1, CV_64F);
+    Mat result = Mat::zeros(_n_features, 1, CV_64F);
     Node left, right;
 
-    for (vector<Node>::iterator it = nodes.begin(); it != nodes.end(); it++)
+    for (vector<Node>::iterator it = _nodes.begin(); it != _nodes.end(); it++)
     {
         if (it->left_child != TREE_LEAF)
         {
-            left = nodes.at(it->left_child);
-            right = nodes.at(it->right_child);
+            left = _nodes.at(it->left_child);
+            right = _nodes.at(it->right_child);
 
             result.at<double>(it->feature, 0) += (
                         it->weighted_n_node_samples * it->impurity -
@@ -125,7 +125,7 @@ Mat_<double> Tree::compute_feature_importances(bool normalize)
         }
     }
 
-    result /= nodes.at(0).weighted_n_node_samples;
+    result /= _nodes.at(0).weighted_n_node_samples;
 
     if (normalize)
     {

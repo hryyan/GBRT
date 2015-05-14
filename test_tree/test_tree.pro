@@ -15,6 +15,8 @@ HEADERS += criterion_test.h \
            tools.h \
            ../tree/criterion.h \
            ../tree/splitter.h \
+           ../tree/basetree.h \
+           ../tree/tree.h \
            ../tree/util.h
 
 SOURCES += main.cpp \
@@ -24,6 +26,8 @@ SOURCES += main.cpp \
            tools.cpp \
            ../tree/criterion.cpp \
            ../tree/splitter.cpp \
+           ../tree/basetree.cpp \
+           ../tree/tree.cpp \
            ../tree/util.cpp
 
 LIBS += -L/usr/local/lib
