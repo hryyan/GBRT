@@ -1,6 +1,6 @@
 #include "tools.h"
 
-pair<Mat, Mat> read_data_from_txt(QString str)
+pair<Mat, Mat> read_data_from_txt_classification(QString str)
 {
     QFile f(str);
     QList<QVector<double>> feats;
