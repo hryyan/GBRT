@@ -353,10 +353,10 @@ void RegressionCriterion::update(int new_pos)
 
     mean_left = sum_left / weighted_n_left;
     mean_right = sum_right / weighted_n_right;
-    var_left = (sq_sum_left / weighted_n_left -
-                mean_left * mean_left);
-    var_right = (sq_sum_right / weighted_n_right -
-                 mean_right * mean_right);
+    var_left = sq_sum_left / weighted_n_left -
+                mean_left * mean_left;
+    var_right = sq_sum_right / weighted_n_right -
+                 mean_right * mean_right;
 
     pos = new_pos;
 }
