@@ -46,7 +46,7 @@ struct N
 class TreeBuilder
 {
 public:
-    TreeBuilder(Splitter& splitter,
+    TreeBuilder(Splitter* splitter,
                 int min_samples_split,
                 int min_samples_leaf,
                 double min_weight_leaf,
@@ -61,12 +61,12 @@ public:
      * @param y
      * @param sample_weight
      */
-    virtual void build(BaseDecisionTree& tree,
+    virtual void build(Tree* tree,
                        Mat_<double> X,
                        Mat_<double> y,
                        Mat_<double> sample_weight)=0;
 public:
-    Splitter& splitter;
+    Splitter* splitter;
     int min_samples_split;
     int min_samples_leaf;
     double min_weight_leaf;
@@ -88,7 +88,7 @@ public:
      * @param max_depth
      * @param max_leaf_nodes
      */
-    DepthFirstBuilder(Splitter& splitter,
+    DepthFirstBuilder(Splitter* splitter,
                       int min_samples_split,
                       int min_samples_leaf,
                       double min_weight_leaf,
@@ -103,7 +103,7 @@ public:
      * @param y
      * @param sample_weight
      */
-    virtual void build(BaseDecisionTree& tree,
+    virtual void build(Tree* tree,
                        Mat_<double> X,
                        Mat_<double> y,
                        Mat_<double> sample_weight);
@@ -127,7 +127,7 @@ public:
      * @param max_depth
      * @param max_leaf_nodes
      */
-    BestFirstTreeBuilder(Splitter& splitter,
+    BestFirstTreeBuilder(Splitter* splitter,
                          int min_samples_split,
                          int min_samples_leaf,
                          double min_weight_leaf,
@@ -142,7 +142,7 @@ public:
      * @param y
      * @param sample_weight
      */
-    virtual void build(BaseDecisionTree& tree,
+    virtual void build(Tree* tree,
                        Mat_<double> X,
                        Mat_<double> y,
                        Mat_<double> sample_weight);
@@ -161,8 +161,8 @@ public:
      * @param res
      * @return
      */
-    int _add_split_node(Splitter& splitter,
-                        BaseDecisionTree& tree,
+    int _add_split_node(Splitter* splitter,
+                        Tree* tree,
                         int start,
                         int end,
                         double impurity,

@@ -6,7 +6,7 @@ Mat_<double> compute_sample_weight(Mat_<double> class_weight,
     // The smallest class info response to the class_weight[0]
     // The largest class info response to the class_weight[end]
     // Default
-    Mat_<double> weight = Mat::ones(y.rows, 1, CV_32F);
+    Mat_<double> weight = Mat::ones(y.rows, 1, CV_64F);
     if (class_weight.total() != 0)
     {
         for (int i = 0; i < y.rows; i++)

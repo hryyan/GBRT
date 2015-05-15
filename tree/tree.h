@@ -2,7 +2,6 @@
 #define TREE_H
 
 #include <opencv2/opencv.hpp>
-#include "basetree.h"
 #include "util.h"
 
 using cv::Mat;
@@ -10,6 +9,8 @@ using cv::Mat_;
 
 class Criterion;
 class Splitter;
+class Tree;
+class TreeBuilder;
 
 class BaseDecisionTree
 {
@@ -28,8 +29,8 @@ public:
      * @param class_weight
      * @param is_classification 0 for classification, 1 for regression
      */
-    BaseDecisionTree(Criterion* criterion,
-                     Splitter* splitter,
+    BaseDecisionTree(char* criterion_name,
+                     char* splitter_name,
                      int max_depth,
                      int min_samples_split,
                      int min_samples_leaf,
@@ -81,12 +82,15 @@ public:
     int _max_leaf_nodes;
     Mat _class_weight;
 
+    char* _criterion_name;
+    char* _splitter_name;
+
     int _n_samples;
     int _n_features;
     int _is_classification;
 
-    Tree _tree;
-    int _max_features;
+    Tree* _tree;
+    TreeBuilder* _tree_builder;
 };
 
 class DecisionTreeClassifier : public BaseDecisionTree
@@ -105,8 +109,8 @@ public:
      * @param random_state
      * @param class_weight
      */
-    DecisionTreeClassifier(Criterion* criterion,
-                           Splitter* splitter,
+    DecisionTreeClassifier(char* criterion_name,
+                           char* splitter_name,
                            int max_depth,
                            int min_samples_split,
                            int min_samples_leaf,
@@ -149,8 +153,8 @@ public:
      * @param random_state
      * @param class_weight
      */
-    DecisionTreeRegressor(Criterion* criterion,
-                          Splitter* splitter,
+    DecisionTreeRegressor(char* criterion_name,
+                          char* splitter_name,
                           int max_depth,
                           int min_samples_split,
                           int min_samples_leaf,

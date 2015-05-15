@@ -1,6 +1,6 @@
 #include "treebuilder.h"
 
-TreeBuilder::TreeBuilder(Splitter& _splitter,
+TreeBuilder::TreeBuilder(Splitter* _splitter,
                          int _min_samples_split,
                          int _min_samples_leaf,
                          double _min_weight_leaf,
@@ -21,7 +21,7 @@ TreeBuilder::~TreeBuilder()
 
 }
 
-DepthFirstBuilder::DepthFirstBuilder(Splitter& _splitter,
+DepthFirstBuilder::DepthFirstBuilder(Splitter* _splitter,
                                      int _min_samples_split,
                                      int _min_samples_leaf,
                                      double _min_weight_leaf,
@@ -43,7 +43,7 @@ DepthFirstBuilder::~DepthFirstBuilder()
 
 }
 
-void DepthFirstBuilder::build(BaseDecisionTree& _tree,
+void DepthFirstBuilder::build(Tree* _tree,
                               Mat_<double> _X,
                               Mat_<double> _y,
                               Mat_<double> _sample_weight)
@@ -128,7 +128,7 @@ void DepthFirstBuilder::build(BaseDecisionTree& _tree,
     }
 }
 
-BestFirstTreeBuilder::BestFirstTreeBuilder(Splitter& _splitter,
+BestFirstTreeBuilder::BestFirstTreeBuilder(Splitter* _splitter,
                                            int _min_samples_split,
                                            int _min_samples_leaf,
                                            double _min_weight_leaf,
@@ -149,7 +149,7 @@ BestFirstTreeBuilder::~BestFirstTreeBuilder()
 
 }
 
-void BestFirstTreeBuilder::build(BaseDecisionTree& _tree,
+void BestFirstTreeBuilder::build(Tree* _tree,
                                  Mat_<double> _X,
                                  Mat_<double> _y,
                                  Mat_<double> _sample_weight)
@@ -163,8 +163,8 @@ void BestFirstTreeBuilder::build(BaseDecisionTree& _tree,
 
 }
 
-int BestFirstTreeBuilder::_add_split_node(Splitter& splitter,
-                                          BaseDecisionTree& tree,
+int BestFirstTreeBuilder::_add_split_node(Splitter* splitter,
+                                          Tree* tree,
                                           int start,
                                           int end,
                                           double impurity,

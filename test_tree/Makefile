@@ -54,6 +54,7 @@ SOURCES       = main.cpp \
 		../tree/splitter.cpp \
 		../tree/basetree.cpp \
 		../tree/tree.cpp \
+		../tree/treebuilder.cpp \
 		../tree/util.cpp 
 OBJECTS       = main.o \
 		criterion_test.o \
@@ -64,6 +65,7 @@ OBJECTS       = main.o \
 		splitter.o \
 		basetree.o \
 		tree.o \
+		treebuilder.o \
 		util.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
@@ -294,7 +296,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/test_tree1.0.0 || mkdir -p .tmp/test_tree1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/test_tree1.0.0/ && $(COPY_FILE) --parents criterion_test.h splitter_test.h util_test.h tools.h ../tree/criterion.h ../tree/splitter.h ../tree/basetree.h ../tree/tree.h ../tree/util.h .tmp/test_tree1.0.0/ && $(COPY_FILE) --parents main.cpp criterion_test.cpp splitter_test.cpp util_test.cpp tools.cpp ../tree/criterion.cpp ../tree/splitter.cpp ../tree/basetree.cpp ../tree/tree.cpp ../tree/util.cpp .tmp/test_tree1.0.0/ && (cd `dirname .tmp/test_tree1.0.0` && $(TAR) test_tree1.0.0.tar test_tree1.0.0 && $(COMPRESS) test_tree1.0.0.tar) && $(MOVE) `dirname .tmp/test_tree1.0.0`/test_tree1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/test_tree1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/test_tree1.0.0/ && $(COPY_FILE) --parents criterion_test.h splitter_test.h util_test.h tools.h ../tree/criterion.h ../tree/splitter.h ../tree/basetree.h ../tree/tree.h ../tree/treebuilder.h ../tree/util.h .tmp/test_tree1.0.0/ && $(COPY_FILE) --parents main.cpp criterion_test.cpp splitter_test.cpp util_test.cpp tools.cpp ../tree/criterion.cpp ../tree/splitter.cpp ../tree/basetree.cpp ../tree/tree.cpp ../tree/treebuilder.cpp ../tree/util.cpp .tmp/test_tree1.0.0/ && (cd `dirname .tmp/test_tree1.0.0` && $(TAR) test_tree1.0.0.tar test_tree1.0.0 && $(COMPRESS) test_tree1.0.0.tar) && $(MOVE) `dirname .tmp/test_tree1.0.0`/test_tree1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/test_tree1.0.0
 
 
 clean:compiler_clean 
@@ -949,11 +951,17 @@ basetree.o: ../tree/basetree.cpp ../tree/basetree.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o basetree.o ../tree/basetree.cpp
 
 tree.o: ../tree/tree.cpp ../tree/tree.h \
-		../tree/basetree.h \
 		../tree/util.h \
 		../tree/criterion.h \
-		../tree/splitter.h
+		../tree/splitter.h \
+		../tree/basetree.h \
+		../tree/treebuilder.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tree.o ../tree/tree.cpp
+
+treebuilder.o: ../tree/treebuilder.cpp ../tree/treebuilder.h \
+		../tree/tree.h \
+		../tree/util.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o treebuilder.o ../tree/treebuilder.cpp
 
 util.o: ../tree/util.cpp ../tree/util.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o util.o ../tree/util.cpp
