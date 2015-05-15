@@ -13,11 +13,20 @@ using cv::Mat_;
 
 class Criterion;
 class Splitter;
+class Node;
 
 const double MIN_IMPURITY_SPLIT = 1e-7;
 
 struct N
 {
+    int start;
+    int end;
+    int depth;
+    int parent;
+    bool is_left;
+    double impurity;
+    int n_constant_features;
+
     N(int _start,
       int _end,
       int _depth,
@@ -32,15 +41,7 @@ struct N
           is_left(_is_left),
           impurity(_impurity),
           n_constant_features(_n_constant_feautes){
-    };
-
-    int start;
-    int end;
-    int depth;
-    int parent;
-    bool is_left;
-    double impurity;
-    int n_constant_features;
+    }
 };
 
 class TreeBuilder

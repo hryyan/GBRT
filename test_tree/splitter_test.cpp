@@ -19,10 +19,6 @@ int BestSplitter_classification_test(char* criterion_name, QString filename)
 
     Mat sample_weight = Mat::ones(200, 1, CV_64F);
 
-    vector<int> vec;
-    for (int i = 0; i < 10; i++)
-        vec.push_back(i);
-
     Criterion* g;
     if (strcmp(criterion_name, "Gini") == 0)
         g = new Gini();
@@ -50,10 +46,6 @@ int BestSplitter_regression_test(char* criterion_name, QString filename)
     Mat y = pmat.second;
 
     Mat sample_weight = Mat::ones(200, 1, CV_64F);
-
-    vector<int> vec;
-    for (int i = 0; i < 10; i++)
-        vec.push_back(i);
 
     Criterion* g;
     if (strcmp(criterion_name, "Gini") == 0)

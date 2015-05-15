@@ -152,9 +152,10 @@ BestSplitter::~BestSplitter()
 }
 
 void BestSplitter::node_split(double impurity,
-                         SplitRecord *split,
-                         int* n_constant_features)
+                              SplitRecord *split,
+                              int* n_constant_features)
 {
+    int range = end - start;
     split->init_split(end);
 
     std::pair<double, double> pdd;
@@ -235,9 +236,10 @@ void BestSplitter::node_split(double impurity,
               * feature_values[i] == X[sampels[i], j], so the sort uses the cache more
               * effectively.
               */
+            feature_values.resize(range);
             for (int i = start; i < end; i++)
             {
-                feature_values.at(i) = X.at<double>(samples[i], current.feature);
+                feature_values.at(i-start) = X.at<double>(samples[i], current.feature);
             }
 
             // sort feature_values and apply the squence to samples
@@ -273,7 +275,7 @@ void BestSplitter::node_split(double impurity,
                 while (p < end)
                 {
                     while (p + 1 < end && \
-                           feature_values.at(p+1) <= feature_values.at(p) + FEATURE_THRESHOLD)
+                           feature_values.at(p+1-start) <= feature_values.at(p-start) + FEATURE_THRESHOLD)
                         p += 1;
 
                     p += 1;
@@ -302,10 +304,10 @@ void BestSplitter::node_split(double impurity,
                             pdd = criterion->children_impurity();
                             current.impurity_left = pdd.first;
                             current.impurity_right = pdd.second;
-                            current.threshold = (feature_values.at(p-1) + feature_values.at(p)) / 2.0;
+                            current.threshold = (feature_values.at(p-1-start) + feature_values.at(p-start)) / 2.0;
 
-                            if (current.threshold == feature_values.at(p))
-                                current.threshold = feature_values.at(p-1);
+                            if (current.threshold == feature_values.at(p-start))
+                                current.threshold = feature_values.at(p-1-start);
 
                             best = current;
                         }
@@ -316,7 +318,7 @@ void BestSplitter::node_split(double impurity,
     }
 
     // Recoganize into samples[start:best.pos] + samples[best.pos:end]
-    if (best.pos < end)
+    if (best.pos < range)
     {
         partition_end = end;
         p = start;

@@ -31,7 +31,8 @@ int Tree::_add_node(int parent,
     int node_id = _node_count;
 
     // Insure _nodes has enough elements
-    _nodes.push_back(Node());
+    Node n = Node();
+    _nodes.push_back(n);
 
     Node* node = &(_nodes.at(node_id));
     node->impurity = impurity;
@@ -72,8 +73,8 @@ Mat Tree::predict(Mat _X)
 {
     Mat out = _apply_dense(_X);
     Mat_<double> result(_X.rows, 1);
-    for (int i = 0; i < out.total(); i++)
-        result.at<double>(i, 0) = _value.at(out.at<int>(i, 0));
+//    for (int i = 0; i < out.total(); i++)
+//        result.at<double>(i, 0) = _value.at(out.at<int>(i, 0));
     return result;
 }
 

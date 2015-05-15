@@ -18,7 +18,8 @@ HEADERS += criterion_test.h \
            ../tree/basetree.h \
            ../tree/tree.h \
            ../tree/treebuilder.h \
-           ../tree/util.h
+           ../tree/util.h \
+    decisiontree_test.h
 
 SOURCES += main.cpp \
            criterion_test.cpp \
@@ -30,7 +31,8 @@ SOURCES += main.cpp \
            ../tree/basetree.cpp \
            ../tree/tree.cpp \
            ../tree/treebuilder.cpp \
-           ../tree/util.cpp
+           ../tree/util.cpp \
+    decisiontree_test.cpp
 
 LIBS += -L/usr/local/lib
 LIBS += -lopencv_core

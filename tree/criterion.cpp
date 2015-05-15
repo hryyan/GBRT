@@ -66,6 +66,11 @@ void ClassificationCriterion::init(Mat _y,
     }
     n_classes = unique.size();
 
+    // Clear
+    label_count_total.clear();
+    label_count_left.clear();
+    label_count_right.clear();
+
     // Initialize
     label_count_total.resize(n_classes);
     label_count_left.resize(n_classes);
@@ -76,7 +81,7 @@ void ClassificationCriterion::init(Mat _y,
     int index;
     for (int i = start; i < end; i++)
     {
-        index = samples.at(i);
+        index = samples.at(i-start);
 
         if (sample_weight.total() == 0)
         {
@@ -114,7 +119,7 @@ void ClassificationCriterion::update(int new_pos)
     double diff_w = 0.0;
     for (int i = pos; i < new_pos; i++)
     {
-        index = samples.at(i);
+        index = samples.at(i-start);
 
         if (sample_weight.total() != 0)
         {

@@ -9,9 +9,13 @@
 #include <iostream>
 #include "criterion.h"
 #include "splitter.h"
+#include "basetree.h"
+#include "tree.h"
+#include "treebuilder.h"
 #include "util.h"
 #include "criterion_test.h"
 #include "splitter_test.h"
+#include "decisiontree_test.h"
 #include "util_test.h"
 #include "tools.h"
 using namespace cv;
@@ -26,14 +30,17 @@ int main()
 //    FriedmanMSE_test();
 
     // Splitter_test
-//    BestSplitter_classification_test("Gini", "test4.txt");
+    BestSplitter_classification_test("Gini", "test4.txt");
 //    BestSplitter_classification_test("Entropy", "test4.txt");
-    BestSplitter_regression_test("MSE", "test1.txt");
+//    BestSplitter_regression_test("MSE", "test1.txt");
 //    BestSplitter_regression_test("FriedmanMSE", "test1.txt");
 //    RandomSplitter_test();
 
     // Util_test
 //    sort_apply_permutation_test();
+
+    // DesicitionTree_test
+//    DecisionTreeClassification_test("test1.txt");
 
     // Tools
 }

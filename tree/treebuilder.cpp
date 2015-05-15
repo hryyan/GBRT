@@ -1,4 +1,8 @@
 #include "treebuilder.h"
+#include "criterion.h"
+#include "splitter.h"
+#include "basetree.h"
+#include "tree.h"
 
 TreeBuilder::TreeBuilder(Splitter* _splitter,
                          int _min_samples_split,
@@ -51,9 +55,11 @@ void DepthFirstBuilder::build(Tree* _tree,
     if (_sample_weight.total() != 0)
         sample_weight = _sample_weight;
 
-    int n_node_samples;
+    splitter->init(_X, _y, _sample_weight);
+
+    int n_node_samples = splitter->n_samples;
     bool is_leaf;
-    double weighted_n_node_samples;
+    double weighted_n_node_samples = splitter->weighted_n_samples;
     SplitRecord split;
     int node_id;
     int max_depth_seen = -1;
@@ -85,7 +91,7 @@ void DepthFirstBuilder::build(Tree* _tree,
         n_constant_features = n.n_constant_features;
 
         n_node_samples = end - start;
-        weighted_n_node_samples = splitter.node_reset(start, end);
+        weighted_n_node_samples = splitter->node_reset(start, end);
 
         is_leaf = ((n.depth >= max_depth) ||
                    (n_node_samples < min_samples_split) ||
@@ -94,7 +100,7 @@ void DepthFirstBuilder::build(Tree* _tree,
 
         if (first)
         {
-            impurity = splitter.node_impurity();
+            impurity = splitter->node_impurity();
             first = false;
         }
 
@@ -102,18 +108,21 @@ void DepthFirstBuilder::build(Tree* _tree,
 
         if (!is_leaf)
         {
-            splitter.node_split(impurity, &split, &n_constant_features);
+            splitter->node_split(impurity, &split, &n_constant_features);
             is_leaf = is_leaf or (split.pos >= end);
         }
 
-        node_id = _tree._add_node(parent, is_left, is_leaf, split.feature,
+        node_id = _tree->_add_node(parent, is_left, is_leaf, split.feature,
                                   split.threshold, impurity, n_node_samples,
                                   weighted_n_node_samples);
 
         if (is_leaf)
         {
             // Don't store value for internal nodes
-            splitter.node_value().at(_tree.value.at(node_id));
+            if (_tree->_value.size() < node_id+1)
+                _tree->_value.resize(node_id+1);
+            _tree->_value.at(node_id) = splitter->node_value();
+//            splitter->node_value().at(_tree->_value.at(node_id));
         }
         else
         {
@@ -154,6 +163,26 @@ void BestFirstTreeBuilder::build(Tree* _tree,
                                  Mat_<double> _y,
                                  Mat_<double> _sample_weight)
 {
+    if (_sample_weight.total() != 0)
+        sample_weight = _sample_weight;
+
+    int n_node_samples;
+    bool is_leaf;
+    double weighted_n_node_samples;
+//    SplitterRecord split;
+    int node_id;
+    int max_depth_seen = -1;
+
+    int start;
+    int end;
+    int depth;
+    int parent;
+    bool is_left;
+    double impurity;
+    int n_constant_features;
+
+    bool first = true;
+
 //    X = _X;
 //    y = _y;
 //    sample_weight = _sample_weight;

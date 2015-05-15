@@ -104,10 +104,10 @@ int BaseDecisionTree::fit(Mat X,
     }
 
     // Set min_weight_fraction_leaf
-    if (_min_weight_fraction_leaf != 0.)
-        _min_weight_fraction_leaf = _min_weight_fraction_leaf * cv::sum(sample_weight)[0];
-    else
-        _min_weight_fraction_leaf = 0.;
+//    if (_min_weight_fraction_leaf != 0.)
+//        _min_weight_fraction_leaf = _min_weight_fraction_leaf * cv::sum(sample_weight)[0];
+//    else
+//        _min_weight_fraction_leaf = 0.;
 
     // Set min_samples_split
     _min_samples_split = max(_min_samples_split, 2 * _min_samples_leaf);

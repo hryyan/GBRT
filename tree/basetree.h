@@ -3,7 +3,9 @@
 
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <utility>
 #include <numeric>
+using std::pair;
 using std::vector;
 using cv::Mat;
 using cv::Mat_;
@@ -13,8 +15,8 @@ class Splitter;
 
 enum TreeType
 {
-    TREE_LEAF,
-    TREE_UNDEFINED
+    TREE_UNDEFINED=-2,
+    TREE_LEAF=-1,
 };
 
 /**
@@ -173,7 +175,7 @@ public:
     int _node_count;             // Counter for node IDs
     int _capacity;               // Capacity of tree, in terms of nodes
     vector<Node> _nodes;         // Array of nodes
-    vector<double> _value;       // The value of every node
+    vector<vector<double>> _value;       // The value of every node
 };
 
 #endif // BASETREE_H
