@@ -127,9 +127,9 @@ void DepthFirstBuilder::build(Tree* _tree,
         else
         {
             // Push right child on stack
-            stk.push(N(split.pos, end, depth+1, node_id, 0,
+            stk.push(N(split.pos+start, end, depth+1, node_id, 0,
                        split.impurity_right, n_constant_features));
-            stk.push(N(start, split.pos, depth+1, node_id, 1,
+            stk.push(N(start, split.pos+start, depth+1, node_id, 1,
                        split.impurity_left, n_constant_features));
         }
         if (depth > max_depth)

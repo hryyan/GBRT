@@ -100,7 +100,7 @@ void ClassificationCriterion::init(Mat _y,
 
 void ClassificationCriterion::reset()
 {
-    pos = start;
+    pos = 0;
 
     weighted_n_left = 0.0;
     weighted_n_right = weighted_n_node_samples;

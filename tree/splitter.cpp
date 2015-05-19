@@ -102,8 +102,8 @@ double Splitter::node_reset(int _start, int _end)
                     start,
                     end);
 
-    weighted_n_samples = criterion->weighted_n_node_samples;
-    return weighted_n_samples;
+    double weighted_n_node_samples = criterion->weighted_n_node_samples;
+    return weighted_n_node_samples;
 }
 
 BaseDenseSplitter::BaseDenseSplitter(Criterion* criterion,
@@ -176,6 +176,8 @@ void BestSplitter::node_split(double impurity,
 
     feature_values.resize(range);
     active_samples = vector<int>(samples.begin()+start, samples.begin()+end);
+    vector<int> sorted_samples = active_samples;
+    std::sort(sorted_samples.begin(), sorted_samples.end());
 
     /**
       * Sample up to max_features without replacement using a
@@ -333,7 +335,7 @@ void BestSplitter::node_split(double impurity,
 
 //                        criterion->update(current.pos);
 
-//                        // Reject if min_weight_leaf is not satisfied
+//                        // Reject if min_weight_leaf is not Truesatisfied
 //                        if ((criterion->weighted_n_left < min_weight_leaf) ||
 //                                criterion->weighted_n_right < min_weight_leaf)
 //                            continue;
