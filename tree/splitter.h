@@ -19,10 +19,10 @@ const double FEATURE_THRESHOLD = 1e-7;
 struct SplitRecord
 {
     int feature;            // Which feature to split on
+    double threshold;       // Threshold to split at.
     int pos;                // Split samples array at the given position.
                             // i.e. count of samples below threshold for feature
                             // pos is >= end if the node is a leaf
-    double threshold;       // Threshold to split at.
     double improvement;     // Impurity improvement given parent node.
     double impurity_left;   // Impurity of the left split.
     double impurity_right;  // Impurity of the right split.
@@ -49,16 +49,6 @@ struct SplitRecord
         impurity_left = impurity_left;
         impurity_right = impurity_right;
     }
-
-//    void clone(SplitRecord* split)
-//    {
-//        split->feature = feature;
-//        split->pos = pos;
-//        split->threshold = threshold;
-//        split->improvement = improvement;
-//        split->impurity_left = impurity_left;
-//        split->impurity_right = impurity_right;
-//    }
 };
 
 /**

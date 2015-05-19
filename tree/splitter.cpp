@@ -316,47 +316,6 @@ void BestSplitter::node_split(double impurity,
                         }
                     }
                 }
-//                while (p < end)
-//                {
-//                    while (p + 1 < end && \
-//                           feature_values.at(p+1-start) <= feature_values.at(p-start) + FEATURE_THRESHOLD)
-//                        p += 1;
-
-//                    p += 1;
-
-//                    if (p < end)
-//                    {
-//                        current.pos = p;
-
-//                        // Reject if min_samples_leaf is not guaranteed
-//                        if (((current.pos - start) < min_samples_leaf) ||
-//                             ((end - current.pos) < min_samples_leaf))
-//                            continue;
-
-//                        criterion->update(current.pos);
-
-//                        // Reject if min_weight_leaf is not Truesatisfied
-//                        if ((criterion->weighted_n_left < min_weight_leaf) ||
-//                                criterion->weighted_n_right < min_weight_leaf)
-//                            continue;
-
-//                        double a = impurity;
-//                        current.improvement = criterion->impurity_improvement(impurity);
-
-//                        if (current.improvement > best.improvement)
-//                        {
-//                            pdd = criterion->children_impurity();
-//                            current.impurity_left = pdd.first;
-//                            current.impurity_right = pdd.second;
-//                            current.threshold = (feature_values.at(p-1-start) + feature_values.at(p-start)) / 2.0;
-
-//                            if (current.threshold == feature_values.at(p-start))
-//                                current.threshold = feature_values.at(p-1-start);
-
-//                            best = current;
-//                        }
-//                    }
-//                }
             }
         }
     }
@@ -381,28 +340,6 @@ void BestSplitter::node_split(double impurity,
             }
         }
     }
-
-//    best.pos += range;
-
-//    if (best.pos < range)
-//    {
-//        partition_end = end;
-//        p = start;
-
-//        while (p < partition_end)
-//        {
-//            if (X.at<double>(samples[p-start], best.feature) <= best.threshold)
-//                p += 1;
-//            else
-//            {
-//                partition_end -= 1;
-
-//                tmp = samples[partition_end-start];
-//                samples[partition_end-start] = samples[p-start];
-//                samples[p-start] = tmp;
-//            }
-//        }
-//    }
 
     // Respect invariant for constant features: the original order of
     // element in features[:n_known_constants] must be preserved for sibling

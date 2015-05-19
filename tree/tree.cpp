@@ -1,5 +1,7 @@
 #include "tree.h"
 #include <stdlib.h>
+#include <algorithm>
+using std::max;
 #include <set>
 #include "criterion.h"
 #include "splitter.h"

@@ -2,25 +2,19 @@
 #define CRITERION_H
 
 //========================================
-//Criterion
-//author: vincent yan, 2015-04-27
+// Criterion
+// author: vincent yan, 2015-04-27
+// Clone of a python ml library(scikit-learn)
 //========================================
-#define DEBUG
-#ifdef DEBUG
-#include <iostream>
-using namespace std;
-#endif
 
 #include <cmath>
 #include <utility>
-#include <algorithm>
 #include <vector>
-#include <set>
 #include <opencv2/opencv.hpp>
 using std::pair;
+using std::make_pair;
 using std::vector;
 using cv::Mat;
-using cv::Mat_;
 
 class Criterion
 {
@@ -64,7 +58,7 @@ public:
      * @brief Evaluate the impurity in children nodes, i.e. the impurity of samples[start:pos] + the impurity of samples[pos:end].
      * @return pair<impurity_left, impurity_right>
      */
-    virtual std::pair<double, double> children_impurity()=0;
+    virtual pair<double, double> children_impurity()=0;
 
     /**
      * @brief Compute the node value of samples[start:end]
@@ -86,8 +80,8 @@ public:
     double impurity_improvement(double impurity);
 
 public:
-    Mat_<double> y;                 // Values of y
-    Mat_<double> sample_weight;     // Sample weights
+    Mat y;                 // Values of y
+    Mat sample_weight;     // Sample weights
 
     vector<int> samples;            // Sample indice in X, y
     int start;                      // samples[start:pos] are the samples in the left node
@@ -150,7 +144,7 @@ public:
      * @brief Evaluate the impurity in children nodes, i.e. the impurity of samples[start:pos] + the impurity of samples[pos:end].
      * @return pair<impurity_left, impurity_right>
      */
-    virtual std::pair<double, double> children_impurity()=0;
+    virtual pair<double, double> children_impurity()=0;
 
     /**
      * @brief Compute the node value of samples[start:end]
@@ -191,7 +185,7 @@ public:
      * @brief Evaluate the impurity in children nodes, i.e. the impurity of samples[start:pos] + the impurity of samples[pos:end].
      * @return pair<impurity_left, impurity_right>
      */
-    virtual std::pair<double, double> children_impurity();
+    virtual pair<double, double> children_impurity();
 };
 
 class Gini : public ClassificationCriterion
@@ -224,7 +218,7 @@ public:
      * @brief Evaluate the impurity in children nodes, i.e. the impurity of samples[start:pos] + the impurity of samples[pos:end].
      * @return pair<impurity_left, impurity_right>
      */
-    virtual std::pair<double, double> children_impurity();
+    virtual pair<double, double> children_impurity();
 };
 
 class RegressionCriterion : public Criterion
@@ -277,7 +271,7 @@ public:
      * @brief Evaluate the impurity in children nodes, i.e. the impurity of samples[start:pos] + the impurity of samples[pos:end].
      * @return pair<impurity_left, impurity_right>
      */
-    virtual std::pair<double, double> children_impurity()=0;
+    virtual pair<double, double> children_impurity()=0;
 
     /**
      * @brief Compute the node value of samples[start:end]
@@ -317,7 +311,7 @@ public:
      * @brief Evaluate the impurity in children nodes, i.e. the impurity of samples[start:pos] + the impurity of samples[pos:end].
      * @return pair<impurity_left, impurity_right>
      */
-    virtual std::pair<double, double> children_impurity();
+    virtual pair<double, double> children_impurity();
 };
 
 class FriedmanMSE : public MSE

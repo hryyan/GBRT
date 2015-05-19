@@ -32,7 +32,7 @@ int main()
     // Splitter_test
 //    BestSplitter_classification_test("Gini", "test4.txt");
 //    BestSplitter_classification_test("Entropy", "test4.txt");
-//    BestSplitter_regression_test("MSE", "test1.txt");
+    BestSplitter_regression_test("MSE", "test1.txt");
 //    BestSplitter_regression_test("FriedmanMSE", "test1.txt");
 //    RandomSplitter_test();
 
@@ -40,7 +40,7 @@ int main()
 //    sort_apply_permutation_test();
 
     // DesicitionTree_test
-    DecisionTreeClassification_test("test4.txt");
+//    DecisionTreeClassification_test("test4.txt");
 //    DecisionTreeRegression_test("test1.txt");
 
     // Tools

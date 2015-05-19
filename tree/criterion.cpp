@@ -1,4 +1,6 @@
 #include "criterion.h"
+#include <set>
+using std::set;
 
 Criterion::Criterion()
     : start(0),
@@ -58,7 +60,7 @@ void ClassificationCriterion::init(Mat _y,
     end = _end;
 
     // Find how many classes in y
-    std::set<double> unique;
+    set<double> unique;
     for (int i = 0; i < y.rows; i++)
     {
         if (unique.find(y.at<double>(i)) == unique.end())
@@ -76,7 +78,7 @@ void ClassificationCriterion::init(Mat _y,
     label_count_left.resize(n_classes);
     label_count_right.resize(n_classes);
 
-    double _weighted_n_node_samples = 0.0;
+    weighted_n_node_samples = 0.0;
     double w = 1.0;
     int index;
     for (int i = start; i < end; i++)
@@ -84,17 +86,15 @@ void ClassificationCriterion::init(Mat _y,
         index = samples.at(i);
 
         if (sample_weight.total() == 0)
-        {
-            w = sample_weight(index);
-        }
+            w = sample_weight.at<double>(index);
 
         // Get count of every class
         int c = (int)y.at<double>(index, 0);
         label_count_total.at(c) += w;
 
-        _weighted_n_node_samples += w;
+        weighted_n_node_samples += w;
     }
-    weighted_n_node_samples = _weighted_n_node_samples;
+
     reset();
 }
 
@@ -130,21 +130,6 @@ void ClassificationCriterion::update(int new_pos)
 
         diff_w += w;
     }
-//    for (int i = pos; i < new_pos; i++)
-//    {
-//        index = samples.at(i-start);
-
-//        if (sample_weight.total() != 0)
-//        {
-//            w = sample_weight.at<double>(index);
-//        }
-
-//        int label_index = (int)y.at<double>(index);
-//        label_count_left.at(label_index) += w;
-//        label_count_right.at(label_index) -= w;
-
-//        diff_w += w;
-//    }
     weighted_n_left += diff_w;
     weighted_n_right -= diff_w;
 
@@ -185,7 +170,7 @@ double Entropy::node_impurity()
     return total;
 }
 
-std::pair<double, double> Entropy::children_impurity()
+pair<double, double> Entropy::children_impurity()
 {
     double entropy_left = 0.0;
     double entropy_right = 0.0;
@@ -212,7 +197,7 @@ std::pair<double, double> Entropy::children_impurity()
     total_left += entropy_left;
     total_right += entropy_right;
 
-    return std::make_pair(total_left, total_right);
+    return make_pair(total_left, total_right);
 }
 
 Gini::Gini()
@@ -241,7 +226,7 @@ double Gini::node_impurity()
     return gini;
 }
 
-std::pair<double, double> Gini::children_impurity()
+pair<double, double> Gini::children_impurity()
 {
     double gini_left = 0.0;
     double gini_right = 0.0;
@@ -259,7 +244,7 @@ std::pair<double, double> Gini::children_impurity()
     gini_right = 1.0 - gini_right / (weighted_n_right *
                                      weighted_n_right);
 
-    return std::make_pair(gini_left, gini_right);
+    return make_pair(gini_left, gini_right);
 }
 
 RegressionCriterion::RegressionCriterion()
@@ -405,7 +390,7 @@ double MSE::node_impurity()
 
 pair<double, double> MSE::children_impurity()
 {
-    return std::make_pair(var_left, var_right);
+    return make_pair(var_left, var_right);
 }
 
 FriedmanMSE::FriedmanMSE()
