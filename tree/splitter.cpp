@@ -174,6 +174,9 @@ void BestSplitter::node_split(double impurity,
     // n_total_constants = n_known_constants + n_found_constants
     int n_total_constants = n_known_constants;
 
+    feature_values.resize(range);
+    active_samples = vector<int>(samples.begin()+start, samples.begin()+end);
+
     /**
       * Sample up to max_features without replacement using a
       * Fisher-Yates-based algorithm (using the local variables 'f_i' and
@@ -236,10 +239,9 @@ void BestSplitter::node_split(double impurity,
               * feature_values[i] == X[sampels[i], j], so the sort uses the cache more
               * effectively.
               */
-            feature_values.resize(range);
-            for (int i = start; i < end; i++)
+            for (int i = 0; i < range; i++)
             {
-                feature_values.at(i-start) = X.at<double>(samples[i], current.feature);
+                feature_values.at(i) = X.at<double>(active_samples.at(i), current.feature);
             }
 
             // sort feature_values and apply the squence to samples
@@ -247,8 +249,8 @@ void BestSplitter::node_split(double impurity,
             auto sequence = sort_permutation(feature_values,
                                 [](double const& a, double const &b){return a<b;});
             feature_values = apply_permutation(feature_values, sequence);
-            samples = apply_permutation(samples, sequence);
-            criterion->samples = samples;
+            active_samples = apply_permutation(active_samples, sequence);
+            criterion->samples = active_samples;
 
             if (feature_values.back() <= feature_values.front() + FEATURE_THRESHOLD)
             {
@@ -270,30 +272,29 @@ void BestSplitter::node_split(double impurity,
 
                 // Evaluate all splits
                 criterion->reset();
-                p = start;
+                p = 0;
 
-                while (p < end)
+                while (p < range)
                 {
-                    while (p + 1 < end && \
-                           feature_values.at(p+1-start) <= feature_values.at(p-start) + FEATURE_THRESHOLD)
+                    while (p + 1 < range &&
+                           feature_values.at(p+1) <= feature_values.at(p) + FEATURE_THRESHOLD)
                         p += 1;
-
                     p += 1;
 
-                    if (p < end)
+                    if (p < range)
                     {
                         current.pos = p;
 
                         // Reject if min_samples_leaf is not guaranteed
-                        if (((current.pos - start) < min_samples_leaf) ||
-                             ((end - current.pos) < min_samples_leaf))
+                        if (((current.pos) < min_samples_leaf) ||
+                            ((end - current.pos) < min_samples_leaf))
                             continue;
 
                         criterion->update(current.pos);
 
                         // Reject if min_weight_leaf is not satisfied
                         if ((criterion->weighted_n_left < min_weight_leaf) ||
-                                criterion->weighted_n_right < min_weight_leaf)
+                             criterion->weighted_n_right < min_weight_leaf)
                             continue;
 
                         double a = impurity;
@@ -304,39 +305,102 @@ void BestSplitter::node_split(double impurity,
                             pdd = criterion->children_impurity();
                             current.impurity_left = pdd.first;
                             current.impurity_right = pdd.second;
-                            current.threshold = (feature_values.at(p-1-start) + feature_values.at(p-start)) / 2.0;
+                            current.threshold = (feature_values.at(p-1) + feature_values.at(p)) / 2.0;
 
-                            if (current.threshold == feature_values.at(p-start))
-                                current.threshold = feature_values.at(p-1-start);
+                            if (current.threshold == feature_values.at(p))
+                                current.threshold = feature_values.at(p-1);
 
                             best = current;
                         }
                     }
                 }
+//                while (p < end)
+//                {
+//                    while (p + 1 < end && \
+//                           feature_values.at(p+1-start) <= feature_values.at(p-start) + FEATURE_THRESHOLD)
+//                        p += 1;
+
+//                    p += 1;
+
+//                    if (p < end)
+//                    {
+//                        current.pos = p;
+
+//                        // Reject if min_samples_leaf is not guaranteed
+//                        if (((current.pos - start) < min_samples_leaf) ||
+//                             ((end - current.pos) < min_samples_leaf))
+//                            continue;
+
+//                        criterion->update(current.pos);
+
+//                        // Reject if min_weight_leaf is not satisfied
+//                        if ((criterion->weighted_n_left < min_weight_leaf) ||
+//                                criterion->weighted_n_right < min_weight_leaf)
+//                            continue;
+
+//                        double a = impurity;
+//                        current.improvement = criterion->impurity_improvement(impurity);
+
+//                        if (current.improvement > best.improvement)
+//                        {
+//                            pdd = criterion->children_impurity();
+//                            current.impurity_left = pdd.first;
+//                            current.impurity_right = pdd.second;
+//                            current.threshold = (feature_values.at(p-1-start) + feature_values.at(p-start)) / 2.0;
+
+//                            if (current.threshold == feature_values.at(p-start))
+//                                current.threshold = feature_values.at(p-1-start);
+
+//                            best = current;
+//                        }
+//                    }
+//                }
             }
         }
     }
 
     // Recoganize into samples[start:best.pos] + samples[best.pos:end]
-    if (best.pos < range)
+    if (best.pos < end)
     {
         partition_end = end;
         p = start;
 
         while (p < partition_end)
         {
-            if (X.at<double>(samples[p], best.feature) <= best.threshold)
+            if (X.at<double>(samples.at(p), best.feature) <= best.threshold)
                 p += 1;
             else
             {
                 partition_end -= 1;
 
-                tmp = samples[partition_end];
-                samples[partition_end] = samples[p];
-                samples[p] = tmp;
+                tmp = samples.at(partition_end);
+                samples.at(partition_end) = samples.at(p);
+                samples.at(p) = tmp;
             }
         }
     }
+
+//    best.pos += range;
+
+//    if (best.pos < range)
+//    {
+//        partition_end = end;
+//        p = start;
+
+//        while (p < partition_end)
+//        {
+//            if (X.at<double>(samples[p-start], best.feature) <= best.threshold)
+//                p += 1;
+//            else
+//            {
+//                partition_end -= 1;
+
+//                tmp = samples[partition_end-start];
+//                samples[partition_end-start] = samples[p-start];
+//                samples[p-start] = tmp;
+//            }
+//        }
+//    }
 
     // Respect invariant for constant features: the original order of
     // element in features[:n_known_constants] must be preserved for sibling

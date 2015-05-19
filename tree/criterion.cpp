@@ -81,7 +81,7 @@ void ClassificationCriterion::init(Mat _y,
     int index;
     for (int i = start; i < end; i++)
     {
-        index = samples.at(i-start);
+        index = samples.at(i);
 
         if (sample_weight.total() == 0)
         {
@@ -119,19 +119,32 @@ void ClassificationCriterion::update(int new_pos)
     double diff_w = 0.0;
     for (int i = pos; i < new_pos; i++)
     {
-        index = samples.at(i-start);
+        index = samples.at(i);
 
         if (sample_weight.total() != 0)
-        {
             w = sample_weight.at<double>(index);
-        }
 
-        int label_index = (int)y.at<double>(index);
+        int label_index = static_cast<int>(y.at<double>(index));
         label_count_left.at(label_index) += w;
         label_count_right.at(label_index) -= w;
 
         diff_w += w;
     }
+//    for (int i = pos; i < new_pos; i++)
+//    {
+//        index = samples.at(i-start);
+
+//        if (sample_weight.total() != 0)
+//        {
+//            w = sample_weight.at<double>(index);
+//        }
+
+//        int label_index = (int)y.at<double>(index);
+//        label_count_left.at(label_index) += w;
+//        label_count_right.at(label_index) -= w;
+
+//        diff_w += w;
+//    }
     weighted_n_left += diff_w;
     weighted_n_right -= diff_w;
 

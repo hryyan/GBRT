@@ -29,29 +29,29 @@ SUBTARGETS    =  \
 
 sub-test_tree-qmake_all:  FORCE
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile
+	cd test_tree/ && $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile
 	cd test_tree/ && $(MAKE) -f Makefile qmake_all
 sub-test_tree: FORCE
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile
+	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile
 sub-test_tree-make_first: FORCE
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile 
+	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile 
 sub-test_tree-all: FORCE
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile all
+	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile all
 sub-test_tree-clean: FORCE
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile clean
+	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile clean
 sub-test_tree-distclean: FORCE
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile distclean
+	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile distclean
 sub-test_tree-install_subtargets: FORCE
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile install
+	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile install
 sub-test_tree-uninstall_subtargets: FORCE
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile uninstall
+	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile uninstall
 
 Makefile: DecisioinTree.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
@@ -179,7 +179,7 @@ uninstall_subtargets: sub-test_tree-uninstall_subtargets FORCE
 
 sub-test_tree-check:
 	@test -d test_tree/ || mkdir -p test_tree/
-	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/QtProjects/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile check
+	cd test_tree/ && ( test -e Makefile || $(QMAKE) /home/vincent/Documents/codes/DecisionTree/test_tree/test_tree.pro -spec linux-g++-64 CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ) && $(MAKE) -f Makefile check
 check: sub-test_tree-check
 install: install_subtargets  FORCE
 

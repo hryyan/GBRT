@@ -133,6 +133,7 @@ public:
     int n_samples;                      // X.shape[0]
     int n_features;                     // X.shape[1]
     vector<int> samples;                // Sample indices in X, y
+    vector<int> active_samples;         // Sample indices in X, y
     vector<int> features;               // Feature indices in x
     vector<int> constant_features;      // Constant features indices
     vector<double> feature_values;      // temp. array holding feature values
