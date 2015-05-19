@@ -36,8 +36,8 @@ Splitter::~Splitter()
 }
 
 int Splitter::init(Mat_<double> _X,
-                    Mat_<double> _y,
-                    Mat_<double> _sample_weight)
+                   Mat_<double> _y,
+                   Mat_<double> _sample_weight)
 {
     // Init some value
     n_samples = _X.rows;

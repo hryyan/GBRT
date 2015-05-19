@@ -310,6 +310,8 @@ void RegressionCriterion::init(Mat _y,
 
 void RegressionCriterion::reset()
 {
+    pos = 0;
+
     mean_right = mean_total;
     mean_left = 0.0;
     sq_sum_right = sq_sum_total;
