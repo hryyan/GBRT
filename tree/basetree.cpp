@@ -71,10 +71,8 @@ int Tree::_add_node(int parent,
 
 Mat Tree::predict(Mat _X)
 {
-    Mat out = _apply_dense(_X);
-//    for (int i = 0; i < out.total(); i++)
-//        result.at<double>(i, 0) = _value.at(out.at<int>(i, 0));
-    return out;
+    // TODO: sparse matrix
+    return _apply_dense(_X);
 }
 
 Mat Tree::_apply_dense(Mat _X)
@@ -89,6 +87,7 @@ Mat Tree::_apply_dense(Mat _X)
         drop = 0;
         node = &(_nodes.at(drop));
 
+        // Down from the tree root
         // While node is not a leaf
         while (node->left_child != TREE_LEAF)
         {
@@ -104,12 +103,15 @@ Mat Tree::_apply_dense(Mat _X)
                 node = &(_nodes.at(node->right_child));
             }
         }
-        int offset = drop;
-//        vector<Node>::iterator it = std::find(_nodes.begin(), _nodes.end(), *node);
-//        int offset = (int)(it - _nodes.begin());
-        vector<double>::iterator c = max_element(_value.at(offset).begin(), _value.at(offset).end());
-        int n = distance(_value.at(offset).begin(), c);
-        result.at<double>(i, 0) = static_cast<double>(distance(_value.at(offset).begin(), c));
+
+        // Get the iterator of droped node
+        vector<double>::iterator c = max_element(_value.at(drop).begin(), _value.at(drop).end());
+
+        // If _value.size > 1, means this is a classification
+        if (_value.size() > 1)
+            result.at<double>(i, 0) = static_cast<double>(distance(_value.at(drop).begin(), c));
+        else
+            result.at<double>(i, 0) = *c;
     }
     return result;
 }

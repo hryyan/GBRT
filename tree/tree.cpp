@@ -61,12 +61,6 @@ int BaseDecisionTree::fit(Mat X,
     if (y.rows != _n_samples)
         return 2;
 
-    // Calculate class_weight
-    Mat expended_class_weight(0, 0, CV_64F);
-    // Get class_weight
-    if (_class_weight.total() != 0)
-        expended_class_weight = compute_sample_weight(_class_weight, y);
-
     // Validation
     if (_max_depth <= 0)
         _max_depth = static_cast<int>(pow(2, 31) - 1);
@@ -90,6 +84,14 @@ int BaseDecisionTree::fit(Mat X,
         s.insert(y.at<double>(i));
     }
     int _n_classes = s.size();
+
+    // Calculate class_weight
+    Mat expended_class_weight(0, 0, CV_64F);
+    // Get class_weight
+    if (_class_weight.total() != 0)
+        expended_class_weight = compute_sample_weight(_class_weight, y);
+    else
+        expended_class_weight = Mat::ones(_n_samples, 1, CV_64F);
 
     // Set samples' weight
     if (expended_class_weight.total())
@@ -167,20 +169,7 @@ int BaseDecisionTree::fit(Mat X,
 
 Mat BaseDecisionTree::predict(Mat X)
 {
-    int n_samples = X.rows;
-    int n_features = X.cols;
-
-    Mat proba = _tree->predict(X);
-    return proba;
-
-    if (_is_classification)
-    {
-
-    }
-    else
-    {
-        return proba;
-    }
+    return _tree->predict(X);
 }
 
 Mat BaseDecisionTree::feature_importances()

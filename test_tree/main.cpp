@@ -41,7 +41,7 @@ int main()
 
     // DesicitionTree_test
 //    DecisionTreeClassification_test("test4.txt");
-//    DecisionTreeRegression_test("test1.txt");
+    DecisionTreeRegression_test("test1.txt");
 
     // Tools
 }

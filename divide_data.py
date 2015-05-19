@@ -51,7 +51,7 @@ def devide_data(filename, structs):
 
 if __name__ == "__main__":
     structs = []
-    structs.append(devide_struct(5, -0.8302, True, None))
+    structs.append(devide_struct(5, -0.1826, True, None))
     # structs.append(devide_struct(9, 1.5472, True, None))
     # structs.append(devide_struct(18, -5.7709, False, None))
     # structs.append(devide_struct(7, -2.7890, False, None))
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     import os
     os.chdir("/home/vincent/QtProjects/DecisionTree/test_data/Regression/")
-    x, y, z = devide_data("test3.txt", structs)
+    x, y, z = devide_data("test1.txt", structs)
     # result0 = 0
     # result1 = 0
     # for i in range(len(y)):
@@ -71,6 +71,7 @@ if __name__ == "__main__":
     #         result0 += 1
     # print(" ".join([str(result0), str(result1)]))
     # print(x)
+
     _sum = 0
     _sq_sum = 0
     for i in range(len(y)):
@@ -82,6 +83,6 @@ if __name__ == "__main__":
     print(_sq_sum)
     print(_mean)
     print(_sq_sum / len(x[0]) - _mean ** 2)
+    print(len(z))
     print(sorted(y))
-    # print(sum(x[0]))
     print(z)

@@ -284,10 +284,18 @@ void RegressionCriterion::init(Mat _y,
     start = _start;
     end = _end;
 
+    sum_total = 0.0;
+    sum_left = 0.0;
+    sum_right = 0.0;
+    sq_sum_total = 0.0;
+    sq_sum_left = 0.0;
+    sq_sum_right = 0.0;
+
     int index;
     double w = 1.0;
     double y_i = 0.0;
     double w_y_i = 0.0;
+    weighted_n_node_samples = 0.0;
 
     for (int i = start; i < end; i++)
     {

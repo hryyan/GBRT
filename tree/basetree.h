@@ -1,18 +1,19 @@
 #ifndef BASETREE_H
 #define BASETREE_H
 
-#include <opencv2/opencv.hpp>
 #include <vector>
 #include <utility>
 #include <numeric>
-using std::pair;
+#include <opencv2/opencv.hpp>
 using std::vector;
 using cv::Mat;
-using cv::Mat_;
 
 class Criterion;
 class Splitter;
 
+/**
+ * @brief Define the TreeType
+ */
 enum TreeType
 {
     TREE_UNDEFINED=-2,
@@ -57,10 +58,7 @@ public:
      * Array-based representation of a binary decision tree.
      * The binary tree is represented as a number of parallel arrays. The i-th
      * element of each array holds information about the node `i`. Node 0 is the
-     * tree's root. You can find a detailed description of all arrays in
-     * `_tree.pxd`. NOTE: Some of the arrays only apply to either leaves or split
-     * nodes, resp. Inpredict this case the values of nodes of the other type are
-     * arbitrary!
+     * tree's root.
      *
      * Attributes
      * ----------

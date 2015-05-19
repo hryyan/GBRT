@@ -109,7 +109,7 @@ void DepthFirstBuilder::build(Tree* _tree,
         if (!is_leaf)
         {
             splitter->node_split(impurity, &split, &n_constant_features);
-            is_leaf = is_leaf or (split.pos >= end);
+            is_leaf = is_leaf || (split.pos >= end);
         }
 
         node_id = _tree->_add_node(parent, is_left, is_leaf, split.feature,
