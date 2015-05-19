@@ -80,12 +80,14 @@ Mat Tree::predict(Mat _X)
 Mat Tree::_apply_dense(Mat _X)
 {
     Node* node;
+    int drop = 0;
     int n_samples = _X.rows;
     Mat_<double> result(n_samples, 1);
 
     for (int i = 0; i < n_samples; i++)
     {
-        node = &(_nodes.at(0));
+        drop = 0;
+        node = &(_nodes.at(drop));
 
         // While node is not a leaf
         while (node->left_child != TREE_LEAF)
@@ -93,15 +95,18 @@ Mat Tree::_apply_dense(Mat _X)
             // and node.right_child != TreeType::TREE_LEAF
             if (_X.at<double>(i, node->feature) <= node->threshold)
             {
+                drop = node->left_child;
                 node = &(_nodes.at(node->left_child));
             }
             else
             {
+                drop = node->right_child;
                 node = &(_nodes.at(node->right_child));
             }
         }
-        vector<Node>::iterator it = std::find(_nodes.begin(), _nodes.end(), *node);
-        int offset = (int)(it - _nodes.begin());
+        int offset = drop;
+//        vector<Node>::iterator it = std::find(_nodes.begin(), _nodes.end(), *node);
+//        int offset = (int)(it - _nodes.begin());
         vector<double>::iterator c = max_element(_value.at(offset).begin(), _value.at(offset).end());
         int n = distance(_value.at(offset).begin(), c);
         result.at<double>(i, 0) = static_cast<double>(distance(_value.at(offset).begin(), c));

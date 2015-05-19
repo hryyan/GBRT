@@ -16,7 +16,7 @@ int DecisionTreeClassification_test(QString filename)
 
     Mat sample_weight = Mat::ones(200, 1, CV_64F);
 
-    DecisionTreeClassifier c("Gini", "Best", 10, 2, 2, 1, 20, -1, 0, sample_weight);
+    DecisionTreeClassifier c("Gini", "Best", 10, 1, 1, 1, 20, -1, 0, sample_weight);
     c.fit(X, y, sample_weight);
     Mat result = c.predict(X);
     for (int i = 0; i < result.total(); i++)
