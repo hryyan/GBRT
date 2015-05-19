@@ -72,10 +72,9 @@ int Tree::_add_node(int parent,
 Mat Tree::predict(Mat _X)
 {
     Mat out = _apply_dense(_X);
-    Mat_<double> result(_X.rows, 1);
 //    for (int i = 0; i < out.total(); i++)
 //        result.at<double>(i, 0) = _value.at(out.at<int>(i, 0));
-    return result;
+    return out;
 }
 
 Mat Tree::_apply_dense(Mat _X)
@@ -102,7 +101,10 @@ Mat Tree::_apply_dense(Mat _X)
             }
         }
         vector<Node>::iterator it = std::find(_nodes.begin(), _nodes.end(), *node);
-        result.at<double>(i, 0) = (int)(it - _nodes.begin());
+        int offset = (int)(it - _nodes.begin());
+        vector<double>::iterator c = max_element(_value.at(offset).begin(), _value.at(offset).end());
+        int n = distance(_value.at(offset).begin(), c);
+        result.at<double>(i, 0) = static_cast<double>(distance(_value.at(offset).begin(), c));
     }
     return result;
 }

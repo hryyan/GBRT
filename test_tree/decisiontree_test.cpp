@@ -18,7 +18,14 @@ int DecisionTreeClassification_test(QString filename)
 
     DecisionTreeClassifier c("Gini", "Best", 10, 2, 2, 1, 20, -1, 0, sample_weight);
     c.fit(X, y, sample_weight);
-    c.predict(X);
+    Mat result = c.predict(X);
+    for (int i = 0; i < result.total(); i++)
+    {
+        if (result.at<double>(i) == y.at<double>(i))
+            cout << "Correct" << endl;
+        else
+            cout << "Wrong" << " " << result.at<double>(i) << " " << y.at<double>(i) << endl;
+    }
 }
 
 int DecisionTreeRegression_test(QString filename)
