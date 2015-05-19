@@ -169,6 +169,7 @@ Mat BaseDecisionTree::predict(Mat X)
     int n_features = X.cols;
 
     Mat proba = _tree->predict(X);
+    return proba;
 
     if (_is_classification)
     {

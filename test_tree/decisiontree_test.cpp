@@ -30,5 +30,21 @@ int DecisionTreeClassification_test(QString filename)
 
 int DecisionTreeRegression_test(QString filename)
 {
+    QString fn = QString("../test_data/Classification/").append(filename);
+    pair<Mat, Mat> pMat = read_data_from_txt_regression(fn);
+    Mat X = pMat.first;
+    Mat y = pMat.second;
 
+    Mat sample_weight = Mat::ones(200, 1, CV_64F);
+
+    DecisionTreeRegressor r("MSE", "Best", 10, 1, 1, 1, 20, -1, 0, sample_weight);
+    r.fit(X, y, sample_weight);
+    Mat result = r.predict(X);
+    for (int i = 0; i < result.total(); i++)
+    {
+        if (result.at<double>(i) == y.at<double>(i))
+            cout << "Correct" << endl;
+        else
+            cout << "Wrong" << " " << result.at<double>(i) << " " << y.at<double>(i) << endl;
+    }
 }
