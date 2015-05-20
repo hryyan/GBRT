@@ -118,6 +118,7 @@ Mat Tree::_apply_dense(Mat _X)
 
 Mat Tree::compute_feature_importances(bool normalize)
 {
+    // TODO
     Mat result = Mat::zeros(_n_features, 1, CV_64F);
     Node left, right;
 
@@ -147,34 +148,3 @@ Mat Tree::compute_feature_importances(bool normalize)
     }
     return result;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

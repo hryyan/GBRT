@@ -3,6 +3,10 @@
 #include "splitter.h"
 #include "basetree.h"
 #include "tree.h"
+#include <stack>
+#include <queue>
+using std::stack;
+using std::priority_queue;
 
 TreeBuilder::TreeBuilder(Splitter* _splitter,
                          int _min_samples_split,
@@ -48,9 +52,9 @@ DepthFirstBuilder::~DepthFirstBuilder()
 }
 
 void DepthFirstBuilder::build(Tree* _tree,
-                              Mat_<double> _X,
-                              Mat_<double> _y,
-                              Mat_<double> _sample_weight)
+                              Mat _X,
+                              Mat _y,
+                              Mat _sample_weight)
 {
     if (_sample_weight.total() != 0)
         sample_weight = _sample_weight;
@@ -58,8 +62,8 @@ void DepthFirstBuilder::build(Tree* _tree,
     splitter->init(_X, _y, _sample_weight);
 
     int n_node_samples = splitter->n_samples;
-    bool is_leaf;
     double weighted_n_node_samples = splitter->weighted_n_samples;
+    bool is_leaf;
     SplitRecord split;
     int node_id;
     int max_depth_seen = -1;
@@ -74,7 +78,7 @@ void DepthFirstBuilder::build(Tree* _tree,
 
     bool first = true;
 
-    std::stack<N> stk;
+    stack<N> stk;
     // Push root node onto stack
     stk.push(N(0, n_node_samples, 0, TREE_UNDEFINED, 0, INFINITY, 0));
 
@@ -122,7 +126,6 @@ void DepthFirstBuilder::build(Tree* _tree,
             if (_tree->_value.size() < node_id+1)
                 _tree->_value.resize(node_id+1);
             _tree->_value.at(node_id) = splitter->node_value();
-//            splitter->node_value().at(_tree->_value.at(node_id));
         }
         else
         {
@@ -159,17 +162,19 @@ BestFirstTreeBuilder::~BestFirstTreeBuilder()
 }
 
 void BestFirstTreeBuilder::build(Tree* _tree,
-                                 Mat_<double> _X,
-                                 Mat_<double> _y,
-                                 Mat_<double> _sample_weight)
+                                 Mat _X,
+                                 Mat _y,
+                                 Mat _sample_weight)
 {
     if (_sample_weight.total() != 0)
         sample_weight = _sample_weight;
 
-    int n_node_samples;
+    splitter->init(_X, _y, _sample_weight);
+
+    int n_node_samples = splitter->n_samples;
+    double weighted_n_node_samples = splitter->weighted_n_samples;
     bool is_leaf;
-    double weighted_n_node_samples;
-//    SplitterRecord split;
+    SplitRecord split;
     int node_id;
     int max_depth_seen = -1;
 
@@ -182,6 +187,10 @@ void BestFirstTreeBuilder::build(Tree* _tree,
     int n_constant_features;
 
     bool first = true;
+
+    priority_queue<P> priq;
+    // Push root to frontier
+    _add_split_node()
 
 //    X = _X;
 //    y = _y;
@@ -203,6 +212,8 @@ int BestFirstTreeBuilder::_add_split_node(Splitter* splitter,
                                           int depth,
                                           N *res)
 {
+    splitter.node_reset(start, end)
+
 //    SplitRecord split;
 //    int node_id;
 //    int n_node_samples;

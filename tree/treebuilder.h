@@ -1,19 +1,13 @@
 #ifndef TREEBUILDER_H
 #define TREEBUILDER_H
 
-#include <cmath>
-#include <stack>
-#include <queue>
 #include <opencv2/opencv.hpp>
-#include "tree.h"
-using std::vector;
-using std::stack;
 using cv::Mat;
-using cv::Mat_;
 
 class Criterion;
 class Splitter;
 class Node;
+class Tree;
 
 const double MIN_IMPURITY_SPLIT = 1e-7;
 
@@ -44,6 +38,42 @@ struct N
     }
 };
 
+struct P
+{
+    int node_id;
+    int start;
+    int end;
+    int pos;
+    int depth;
+    bool is_leaf;
+    double impurity;
+    double impurity_left;
+    double impurity_right;
+    double improvement;
+
+    P(int _node_id,
+      int _start,
+      int _end,
+      int _pos,
+      int _depth,
+      bool _is_leaf,
+      double _impurity,
+      double _impurity_left,
+      double _impurity_right,
+      double _improvement)
+        : node_id(_node_id),
+          start(_start),
+          end(_end),
+          pos(_pos),
+          depth(_depth),
+          is_leaf(_is_leaf),
+          impurity(_impurity),
+          impurity_left(_impurity_left),
+          impurity_right(_impurity_right),
+          improvement(_improvement){
+    }
+};
+
 class TreeBuilder
 {
 public:
@@ -63,9 +93,9 @@ public:
      * @param sample_weight
      */
     virtual void build(Tree* tree,
-                       Mat_<double> X,
-                       Mat_<double> y,
-                       Mat_<double> sample_weight)=0;
+                       Mat X,
+                       Mat y,
+                       Mat sample_weight)=0;
 public:
     Splitter* splitter;
     int min_samples_split;
@@ -74,7 +104,7 @@ public:
     int max_depth;
     int max_leaf_nodes;
 
-    Mat_<double> sample_weight;
+    Mat sample_weight;
 };
 
 class DepthFirstBuilder : public TreeBuilder
@@ -105,12 +135,12 @@ public:
      * @param sample_weight
      */
     virtual void build(Tree* tree,
-                       Mat_<double> X,
-                       Mat_<double> y,
-                       Mat_<double> sample_weight);
+                       Mat X,
+                       Mat y,
+                       Mat sample_weight);
 
 public:
-    Mat_<double> sample_weight;
+    Mat sample_weight;
 };
 
 class BestFirstTreeBuilder : public TreeBuilder
@@ -144,9 +174,9 @@ public:
      * @param sample_weight
      */
     virtual void build(Tree* tree,
-                       Mat_<double> X,
-                       Mat_<double> y,
-                       Mat_<double> sample_weight);
+                       Mat X,
+                       Mat y,
+                       Mat sample_weight);
 
     /**
      * @brief Adds node w/ partition [start, end) to the frontier

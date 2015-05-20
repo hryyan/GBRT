@@ -7,6 +7,7 @@ using std::max;
 #include "splitter.h"
 #include "basetree.h"
 #include "treebuilder.h"
+#include "util.h"
 
 BaseDecisionTree::BaseDecisionTree(char* criterion_name,
                                    char* splitter_name,
@@ -176,7 +177,7 @@ Mat BaseDecisionTree::predict(Mat X)
 
 Mat BaseDecisionTree::feature_importances()
 {
-
+    // TODO:
 }
 
 DecisionTreeClassifier::DecisionTreeClassifier(char* criterion_name,
@@ -207,6 +208,16 @@ DecisionTreeClassifier::DecisionTreeClassifier(char* criterion_name,
 DecisionTreeClassifier::~DecisionTreeClassifier()
 {
 
+}
+
+Mat DecisionTreeClassifier::predict_proba(Mat X)
+{
+    // TODO
+}
+
+Mat DecisionTreeClassifier::predict_log_proba(Mat X)
+{
+    // TODO
 }
 
 DecisionTreeRegressor::DecisionTreeRegressor(char* criterion_name,
