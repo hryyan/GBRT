@@ -108,7 +108,7 @@ Mat Tree::_apply_dense(Mat _X)
         vector<double>::iterator c = max_element(_value.at(drop).begin(), _value.at(drop).end());
 
         // If _value.size > 1, means this is a classification
-        if (_value.size() > 1)
+        if (_value.at(drop).size() > 1)
             result.at<double>(i, 0) = static_cast<double>(distance(_value.at(drop).begin(), c));
         else
             result.at<double>(i, 0) = *c;

@@ -40,8 +40,8 @@ int main()
 //    sort_apply_permutation_test();
 
     // DesicitionTree_test
-    DecisionTreeClassification_test("test4.txt");
-//    DecisionTreeRegression_test("test1.txt");
+//    DecisionTreeClassification_test("test3.txt");
+    DecisionTreeRegression_test("test2.txt");
 
     // Tools
 }
