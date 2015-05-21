@@ -9,7 +9,7 @@
 #include "util.h"
 
 using std::vector;
-using cv::Mat_;
+using cv::Mat;
 
 const double FEATURE_THRESHOLD = 1e-7;
 
@@ -73,9 +73,9 @@ public:
      * @param y
      * @param sample_weight
      */
-    virtual int init(Mat_<double> X,
-                     Mat_<double> y,
-                     Mat_<double> sample_weight);
+    virtual int init(Mat X,
+                     Mat y,
+                     Mat sample_weight);
 
     /**
      * @brief Reset splitter on node samples[start:end].
@@ -132,9 +132,9 @@ public:
     int start;                          // Start position for the current nodes
     int end;                            // End position for the current nodes
 
-    Mat_<double> X;
-    Mat_<double> y;
-    Mat_<double> sample_weight;
+    Mat X;
+    Mat y;
+    Mat sample_weight;
 
 /**
  * The samples vector `samples` is maintained by the Splitter object such
@@ -171,9 +171,9 @@ public:
      * @param y
      * @param sample_weight
      */
-    virtual int init(Mat_<double> X,
-                     Mat_<double> y,
-                     Mat_<double> sample_weight);
+    virtual int init(Mat X,
+                     Mat y,
+                     Mat sample_weight);
 
     /**
      * @brief Find a split on onde samples[start:end].
@@ -257,9 +257,9 @@ public:
                         int _random_state);
     virtual ~PresortBestSplitter();
 
-    virtual int init(Mat_<double> X,
-                      Mat_<double> y,
-                      Mat_<double> sample_weight);
+    virtual int init(Mat X,
+                     Mat y,
+                     Mat sample_weight);
 
     virtual void node_split(double impurity,
                             SplitRecord *split,
@@ -268,8 +268,8 @@ public:
 public:
     vector<int> X_argsorted_ptr;
 
-    Mat_<double> X_old;
-    Mat_<int> X_argsorted;
+    Mat X_old;
+    Mat X_argsorted;
 
     int n_total_samples;
     vector<uchar> sample_mask;

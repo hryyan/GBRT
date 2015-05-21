@@ -35,9 +35,9 @@ Splitter::~Splitter()
 
 }
 
-int Splitter::init(Mat_<double> _X,
-                   Mat_<double> _y,
-                   Mat_<double> _sample_weight)
+int Splitter::init(Mat _X,
+                   Mat _y,
+                   Mat _sample_weight)
 {
     // Init some value
     n_samples = _X.rows;
@@ -125,9 +125,9 @@ BaseDenseSplitter::~BaseDenseSplitter()
 
 }
 
-int BaseDenseSplitter::init(Mat_<double> _X,
-                             Mat_<double> _y,
-                             Mat_<double> _sample_weight)
+int BaseDenseSplitter::init(Mat _X,
+                            Mat _y,
+                            Mat _sample_weight)
 {
     Splitter::init(_X, _y, _sample_weight);
 }
@@ -601,9 +601,9 @@ PresortBestSplitter::~PresortBestSplitter()
 
 }
 
-int PresortBestSplitter::init(Mat_<double> _X,
-                               Mat_<double> _y,
-                               Mat_<double> _sample_weight)
+int PresortBestSplitter::init(Mat _X,
+                              Mat _y,
+                              Mat _sample_weight)
 {
     // Call parent initializer
     BaseDenseSplitter::init(_X, _y, _sample_weight);

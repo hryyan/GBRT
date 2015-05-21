@@ -1,5 +1,4 @@
 #include "basetree.h"
-#include <algorithm>
 #include "criterion.h"
 #include "splitter.h"
 

@@ -19,8 +19,7 @@ HEADERS += criterion_test.h \
            ../tree/tree.h \
            ../tree/treebuilder.h \
            ../tree/util.h \
-    decisiontree_test.h \
-    ../tree/predefine.h
+    decisiontree_test.h
 
 SOURCES += main.cpp \
            criterion_test.cpp \

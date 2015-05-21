@@ -298,7 +298,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/test_tree1.0.0 || mkdir -p .tmp/test_tree1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/test_tree1.0.0/ && $(COPY_FILE) --parents criterion_test.h splitter_test.h util_test.h tools.h ../tree/criterion.h ../tree/splitter.h ../tree/basetree.h ../tree/tree.h ../tree/treebuilder.h ../tree/util.h decisiontree_test.h ../tree/predefine.h .tmp/test_tree1.0.0/ && $(COPY_FILE) --parents main.cpp criterion_test.cpp splitter_test.cpp util_test.cpp tools.cpp ../tree/criterion.cpp ../tree/splitter.cpp ../tree/basetree.cpp ../tree/tree.cpp ../tree/treebuilder.cpp ../tree/util.cpp decisiontree_test.cpp .tmp/test_tree1.0.0/ && (cd `dirname .tmp/test_tree1.0.0` && $(TAR) test_tree1.0.0.tar test_tree1.0.0 && $(COMPRESS) test_tree1.0.0.tar) && $(MOVE) `dirname .tmp/test_tree1.0.0`/test_tree1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/test_tree1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/test_tree1.0.0/ && $(COPY_FILE) --parents criterion_test.h splitter_test.h util_test.h tools.h ../tree/criterion.h ../tree/splitter.h ../tree/basetree.h ../tree/tree.h ../tree/treebuilder.h ../tree/util.h decisiontree_test.h .tmp/test_tree1.0.0/ && $(COPY_FILE) --parents main.cpp criterion_test.cpp splitter_test.cpp util_test.cpp tools.cpp ../tree/criterion.cpp ../tree/splitter.cpp ../tree/basetree.cpp ../tree/tree.cpp ../tree/treebuilder.cpp ../tree/util.cpp decisiontree_test.cpp .tmp/test_tree1.0.0/ && (cd `dirname .tmp/test_tree1.0.0` && $(TAR) test_tree1.0.0.tar test_tree1.0.0 && $(COMPRESS) test_tree1.0.0.tar) && $(MOVE) `dirname .tmp/test_tree1.0.0`/test_tree1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/test_tree1.0.0
 
 
 clean:compiler_clean 
