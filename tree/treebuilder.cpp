@@ -188,127 +188,95 @@ void BestFirstTreeBuilder::build(Tree* _tree,
 
     bool first = true;
 
-//    priority_queue<P> priq;
+    priority_queue<P> pq;
+    P record, split_node_left, split_node_right;
     // Push root to frontier
-//    _add_split_node()
+    _add_split_node(splitter,
+                    _tree,
+                    0,
+                    n_node_samples,
+                    INFINITY,
+                    1,
+                    1,
+                    -1,
+                    0,
+                    &split_node_left);
 
-//    X = _X;
-//    y = _y;
-//    sample_weight = _sample_weight;
-//    splitter.init(_X, y, sample_weight);
+    _add_to_frontier(&split_node_left, pq);
 
-//    std::priority_queue q;
+    while (!pq.empty())
+    {
+        record = pq.pop();
 
+        node =
+    }
 }
 
-int BestFirstTreeBuilder::_add_split_node(Splitter* splitter,
-                                          Tree* tree,
-                                          int start,
-                                          int end,
-                                          double impurity,
-                                          bool is_first,
-                                          bool is_left,
-                                          Node *parent,
-                                          int depth,
-                                          N *res)
+int BestFirstTreeBuilder::_add_split_node(Splitter* _splitter,
+                                          Tree* _tree,
+                                          int _start,
+                                          int _end,
+                                          double _impurity,
+                                          bool _is_first,
+                                          bool _is_left,
+                                          int _parent,
+                                          int _depth,
+                                          P *res)
 {
-//    splitter.node_reset(start, end)
+    SplitRecord split;
+    int n_constant_features = 0;
+    int node_id = 0;
+    bool is_leaf = false;
+    double weighted_n_node_samples = _splitter->node_reset(_start, _end);
 
-//    SplitRecord split;
-//    int node_id;
-//    int n_node_samples;
-//    int n_constant_feature = 0;
-//    double weighted_n_samples = splitter.weighted_n_samples;
-//    double weighted_n_node_samples;
-//    bool is_leaf;
-//    int n_left, n_right;
-//    double imp_diff;
+    if (_is_first)
+        _impurity = _splitter->node_impurity();
 
-//    weighted_n_node_samples = splitter.node_reset(start, end);
+    is_leaf = ((_depth > max_depth) ||
+               (n_node_samples < min_samples_split) ||
+               (n_node_samples < 2 * min_samples_leaf) ||
+               (impurity <= MIN_IMPURITY_SPLIT));
 
-//    if (is_first)
-//        impurity = splitter.node_impurity();
+    if (!is_leaf)
+    {
+        _splitter->node_split(_impurity, split, &n_constant_features);
+        is_leaf = is_leaf || (split.pos >= end);
+    }
 
-//    n_node_samples = end - start;
-//    is_leaf = ((depth > max_depth) ||
-//               (n_node_samples < min_samples_split) ||
-//               (n_node_samples < 2 * min_samples_leaf) ||
-//               (weighted_n_node_samples < min_weight_leaf) ||
-//               (impurity <= MIN_IMPURITY_SPLIT));
+    if (_parent == -1)
+        _parent = TREE_UNDEFINED;
+    node_id = _tree->_add_node(_parent,
+                               _is_left,
+                               is_leaf,
+                               split.feature,
+                               split.threshold,
+                               _impurity,
+                               n_node_samples,
+                               weighted_n_node_samples);
 
-//    if (!is_leaf)
-//    {
-//        splitter.node_split(impurity, &split, &n_constant_feature);
-//        is_leaf = is_leaf || (split.pos >= end);
-//    }
+    _tree->_value.at(node_id) = splitter->node_value();
 
-//    bool on;
-//    if (parent != NULL)
-//        on = true;
-//    else
-//        on = false;
-//    node_id = tree._add_node(parent - tree.nodes,
-//                             on,
-//                             is_left,
-//                             is_leaf,
-//                             split.feature,
-//                             split.threshold,
-//                             impurity,
-//                             n_node_samples,
-//                             weighted_n_node_samples);
+    res->_node_id = node_id;
+    res->_start = _start;
+    res->_end;
+    res->_depth;
+    res->_impurity;
 
-//    if (node_id == -1)
-//        return -1;
-
-//    // Compute values also for split nodes (might become leafs later).
-//    splitter.node_value(tree.value.at(node_id));
-
-//    res.node_id = node_id;
-//    res.start = start;
-//    res.end = end;
-//    res.depth = depth;
-//    res.impurity = impurity;
-
-//    if (!is_leaf)
-//    {
-//        // is split node
-//        res.pos = split.pos;
-//        res.is_leaf = 0;
-//        res.improvement = split.improvement;
-//        res.impurity_left = split.impurity_left;
-//        res.imputity_right = split.impurity_right;
-//    }
-//    else
-//    {
-//        // is leaf => 0 improment
-//        res.pos = end;
-//        res.is_leaf = 1;
-//        res.improvement = 0.0;
-//        res.impurity_left = impurity;
-//        res.impurity_right = impurity;
-//    }
+    if (!is_leaf)
+    {
+        res->_pos = split.pos + _start;
+        res->_is_leaf = 0;
+        res->_improvement = split.improvement;
+        res->_impurity_left = split.impurity_left;
+        res->_impurity_right = split.impurity_right;
+    }
+    else
+    {
+        res->_pos = _end;
+        res->_is_leaf = 1;
+        res->_improvement = 0.0;
+        res->_impurity_left = _impurity;
+        res->_impurity_right = _impurity;
+    }
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

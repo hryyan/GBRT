@@ -2,7 +2,9 @@
 #define TREEBUILDER_H
 
 #include <opencv2/opencv.hpp>
+#include <queue>
 using cv::Mat;
+using std::priority_queue;
 
 class Criterion;
 class Splitter;
@@ -40,39 +42,44 @@ struct N
 
 struct P
 {
-    int node_id;
-    int start;
-    int end;
-    int pos;
-    int depth;
-    bool is_leaf;
-    double impurity;
-    double impurity_left;
-    double impurity_right;
-    double improvement;
+    int _node_id;
+    int _start;
+    int _end;
+    int _pos;
+    int _depth;
+    bool _is_leaf;
+    double _impurity;
+    double _impurity_left;
+    double _impurity_right;
+    double _improvement;
 
-    P(int _node_id,
-      int _start,
-      int _end,
-      int _pos,
-      int _depth,
-      bool _is_leaf,
-      double _impurity,
-      double _impurity_left,
-      double _impurity_right,
-      double _improvement)
-        : node_id(_node_id),
-          start(_start),
-          end(_end),
-          pos(_pos),
-          depth(_depth),
-          is_leaf(_is_leaf),
-          impurity(_impurity),
-          impurity_left(_impurity_left),
-          impurity_right(_impurity_right),
-          improvement(_improvement){
+    P(int node_id,
+      int start,
+      int end,
+      int pos,
+      int depth,
+      bool is_leaf,
+      double impurity,
+      double impurity_left,
+      double impurity_right,
+      double improvement)
+        : _node_id(node_id),
+          _start(start),
+          _end(end),
+          _pos(pos),
+          _depth(depth),
+          _is_leaf(is_leaf),
+          _impurity(impurity),
+          _impurity_left(impurity_left),
+          _impurity_right(impurity_right),
+          _improvement(improvement){
     }
 };
+
+inline bool operator < (const P& p1, const P& p2)
+{
+    return p1._improvement < p2._improvement;
+}
 
 class TreeBuilder
 {
@@ -199,9 +206,23 @@ public:
                         double impurity,
                         bool is_first,
                         bool is_left,
-                        Node* parent,
+                        int parent,
                         int depth,
-                        N* res);
+                        P* res);
+
+    inline void _add_to_frontier(const P& p, priority_queue<P> pq)
+    {
+        pq.push(P(p._node_id,
+                  p._start,
+                  p._end,
+                  p._pos,
+                  p._depth,
+                  p._is_leaf,
+                  p._impurity,
+                  p._impurity_left,
+                  p._impurity_right,
+                  p._improvement));
+    }
 
 public:
     int max_leaf_nodes;
