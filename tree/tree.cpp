@@ -7,6 +7,7 @@ using std::max;
 #include "splitter.h"
 #include "basetree.h"
 #include "treebuilder.h"
+#include "util.h"
 
 BaseDecisionTree::BaseDecisionTree(char* criterion_name,
                                    char* splitter_name,
@@ -62,20 +63,32 @@ int BaseDecisionTree::fit(Mat X,
         return 2;
 
     // Validation
-    if (_max_depth <= 0)
-        _max_depth = static_cast<int>(pow(2, 31) - 1);
-    if (_max_leaf_nodes <= 0)
-        _max_leaf_nodes = -1;
-    if (_max_features <= 0)
-        _max_features = _n_features;
-    if (_max_leaf_nodes > -1 && _max_leaf_nodes < 2)
+    if (_max_depth < 0)
         return 3;
-    if (_min_samples_split <= 0)
-        return 4;
-    if (_min_samples_leaf <= 0)
-        return 5;
-    if (_min_weight_fraction_leaf >= 0 && _min_weight_fraction_leaf <= 0.5)
-        return 6;
+    if (_max_features < 0)
+        return 3;
+    if (_min_samples_leaf < 0)
+        return 3;
+    if (_min_samples_split < 0)
+        return 3;
+    if (_max_leaf_nodes < 0)
+        return 3;
+    if (_min_weight_fraction_leaf < 0. || _min_weight_fraction_leaf > 1.0)
+        return 3;
+
+    // Validation
+    if (_max_depth == 0)
+        _max_depth = static_cast<int>(pow(2, 31) - 1);      // max_depth is arbitrary
+    if (_max_features == 0)
+        _max_features = _n_features;                        // use all feature
+    else if (_max_features > 0.0 && _max_features < 1.0)
+        _max_features = static_cast<int>(_max_features * _n_features);  // use _max_features * _n_features
+    if (_min_samples_leaf < 1)
+        _min_samples_leaf = 1;
+    if (_min_samples_split < 2)
+        _min_samples_split = 2;
+    if (_max_leaf_nodes == 0)
+        _max_leaf_nodes = -1;                               // available when use best_build
 
     // Get _n_classes
     std::set<double> s;
@@ -86,32 +99,22 @@ int BaseDecisionTree::fit(Mat X,
     int _n_classes = s.size();
 
     // Calculate class_weight
-    Mat expended_class_weight(0, 0, CV_64F);
+    Mat expended_class_weight = Mat::ones(_n_samples, 1, CV_64F);
+
     // Get class_weight
     if (_class_weight.total() != 0)
         expended_class_weight = compute_sample_weight(_class_weight, y);
-    else
-        expended_class_weight = Mat::ones(_n_samples, 1, CV_64F);
 
     // Set samples' weight
-    if (expended_class_weight.total())
-    {
-        for (int i = 0; i < sample_weight.total(); i++)
-        {
-            sample_weight.at<double>(i, 0) = sample_weight.at<double>(i, 0) * \
-                                             expended_class_weight.at<double>(i, 0);
-        }
-    }
-    else
-    {
-        sample_weight = expended_class_weight;
-    }
+    for (int i = 0; i < sample_weight.total(); i++)
+        sample_weight.at<double>(i, 0) = sample_weight.at<double>(i, 0) * \
+                                         expended_class_weight.at<double>(i, 0);
 
     // Set min_weight_fraction_leaf
-//    if (_min_weight_fraction_leaf != 0.)
-//        _min_weight_fraction_leaf = _min_weight_fraction_leaf * cv::sum(sample_weight)[0];
-//    else
-//        _min_weight_fraction_leaf = 0.;
+    if (_min_weight_fraction_leaf != 0.)
+        _min_weight_fraction_leaf = _min_weight_fraction_leaf * cv::sum(sample_weight)[0];
+    else
+        _min_weight_fraction_leaf = 0.;
 
     // Set min_samples_split
     _min_samples_split = max(_min_samples_split, 2 * _min_samples_leaf);
@@ -174,7 +177,7 @@ Mat BaseDecisionTree::predict(Mat X)
 
 Mat BaseDecisionTree::feature_importances()
 {
-
+    // TODO:
 }
 
 DecisionTreeClassifier::DecisionTreeClassifier(char* criterion_name,
@@ -205,6 +208,16 @@ DecisionTreeClassifier::DecisionTreeClassifier(char* criterion_name,
 DecisionTreeClassifier::~DecisionTreeClassifier()
 {
 
+}
+
+Mat DecisionTreeClassifier::predict_proba(Mat X)
+{
+    // TODO
+}
+
+Mat DecisionTreeClassifier::predict_log_proba(Mat X)
+{
+    // TODO
 }
 
 DecisionTreeRegressor::DecisionTreeRegressor(char* criterion_name,

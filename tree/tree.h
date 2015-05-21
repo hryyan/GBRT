@@ -2,10 +2,8 @@
 #define TREE_H
 
 #include <opencv2/opencv.hpp>
-#include "util.h"
 
 using cv::Mat;
-using cv::Mat_;
 
 class Criterion;
 class Splitter;
@@ -44,23 +42,23 @@ public:
 
     /**
      * @brief Build a decision tree for the training set (X, y).
-     * @param _X The training input samples, shape = [n_sampels, n_features]
-     * @param _y The target values, shape = [n_samples]
+     * @param X The training input samples, shape = [n_sampels, n_features]
+     * @param y The target values, shape = [n_samples]
      * @param sample_weight Sample weights. If total size equals to zero, then samples are equally weighted.
      * @return error_code
      */
-    int fit(Mat _X,
-            Mat _y,
+    int fit(Mat X,
+            Mat y,
             Mat sample_weight);
 
     /**
      * @brief Predict class or regression value of X.
      * For a classification modle, the predicted class for each sample in X is returned.
      * For a regression model, the predicted value based on X is returned.
-     * @param _X The input samples, shape = [n_samples]
+     * @param X The input samples, shape = [n_samples]
      * @return The predicted classes, or the predict values
      */
-    Mat predict(Mat _X);
+    Mat predict(Mat X);
 
    /**
     * @brief Return the feature importances.
@@ -124,17 +122,17 @@ public:
     /**
      * @brief Predict class probabilities of the input samples X.
      * The predicted class probalility is the fraction of samples of the same class in a leaf.
-     * @param _X The input samples, shape = [n_samples]
+     * @param X The input samples, shape = [n_samples]
      * @return
      */
-    Mat predict_proba(Mat _X);
+    Mat predict_proba(Mat X);
 
     /**
      * @brief Predict class log-probabilities of the input samples X.
-     * @param _X The input samples, shape = [n_samples]
+     * @param X The input samples, shape = [n_samples]
      * @return
      */
-    Mat predict_log_proba(Mat _X);
+    Mat predict_log_proba(Mat X);
 };
 
 class DecisionTreeRegressor : public BaseDecisionTree

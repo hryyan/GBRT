@@ -113,7 +113,7 @@ public:
     }
 
 public:
-    Criterion* criterion;                // impurity Criterion
+    Criterion* criterion;               // impurity Criterion
     int max_features;                   // Number of features to test
     int min_samples_leaf;               // Min samples in a leaf
     double min_weight_leaf;             // Minimum weight in a leaf
