@@ -188,9 +188,9 @@ void BestFirstTreeBuilder::build(Tree* _tree,
 
     bool first = true;
 
-    priority_queue<P> priq;
+//    priority_queue<P> priq;
     // Push root to frontier
-    _add_split_node()
+//    _add_split_node()
 
 //    X = _X;
 //    y = _y;
@@ -212,7 +212,7 @@ int BestFirstTreeBuilder::_add_split_node(Splitter* splitter,
                                           int depth,
                                           N *res)
 {
-    splitter.node_reset(start, end)
+//    splitter.node_reset(start, end)
 
 //    SplitRecord split;
 //    int node_id;
